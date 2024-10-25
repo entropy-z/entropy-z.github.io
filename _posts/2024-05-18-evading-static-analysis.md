@@ -50,7 +50,7 @@ Comparing the difference in the Import Address Table (IAT) between a binary with
 
 ![img](../commons/evading_static_analysis/img2.png)
 
-That was a demonstration using ``Dumpbin.exe``. There are other tools such as: [CFF Explorer](https://ntcore.com/explorer-suite/), [PEView](http://wjradburn.com/software/), [PeBear](https://github.com/hasherezade/pe-bear), [DIE](https://github.com/horsicq/Detect-It-Easy) and more. Now I will show the difference in the disassembly.
+That was a demonstration using ``Dumpbin.exe``. There are other tools such as: [CFF Explorer](https://ntcore.com/explorer-suite/), [PeBear](https://github.com/hasherezade/pe-bear), [DIE](https://github.com/horsicq/Detect-It-Easy) and more. Now I will show the difference in the disassembly.
 
 ### Static
 
