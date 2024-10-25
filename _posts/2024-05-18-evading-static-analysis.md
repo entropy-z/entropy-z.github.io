@@ -178,7 +178,7 @@ Now a sample of the entropy.
 
 A good way to avoid being flagged for entropy is to use options like Stage, inserting English strings into the binary and filling the encrypted payload text with the same byte repeatedly. This works because these added bytes will have an entropy of 0.00, as they are all the same. Removing the CRT Lib, as will be shown in the next topic, also helps reduce entropy.
 
-For ease, there is a tool called Entropy Reducer that I recommend checking out.
+For ease, there is a tool called [Entropy Reducer](https://github.com/Maldev-Academy/EntropyReducer) that I recommend checking out.
 
 # Compilation
 In compilation, it's ideal to have some care, as depending on how it's done, there will be a lot of 'garbage', unnecessary things that will hinder your evasion. Below is a list of what we should do:
