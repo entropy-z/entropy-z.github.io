@@ -7,6 +7,10 @@ date: 2024-05-18 14:10:00 +0800
 categories: [Malware Development]
 tags: []
 render_with_liquid: false
+image:
+  path: /commons/evading_static_analysis/img.webp
+  alt: common design of a modern EDR
+
 ---
 
 # Import Address Table (IAT)
