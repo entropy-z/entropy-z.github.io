@@ -9,8 +9,6 @@ tags: []
 render_with_liquid: false
 image:
   path: /commons/evading_static_analysis/img.webp
-  alt: common design of a modern EDR
-
 ---
 
 # Import Address Table (IAT)
