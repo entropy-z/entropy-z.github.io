@@ -78,7 +78,7 @@ For more information about WINAPI used in malware and its purposes, I recommend 
 
 # Signature
 
-Signature evasion is crucial when we want to create a loader for a ``Command and Control (C2)`` and establish a reverse connection. It is also essential to execute some well-known tools evasively, among other operations. However, the challenge lies in the bytecodes/shellcode we choose to use. In almost 100% of the cases, these tools will have a signature, which means that we cannot simply drop the .bin file in our malware and execute the loader. To solve this problem, there are methods we can employ, and I will show you a little about them.
+Signature evasion is crucial when we want to create a loader for a ``Command and Control (C2)`` and establish a reverse connection. It is also essential to execute some well-known tools evasively, among other operations. However, the challenge lies in the bytecodes/shellcode we choose to use. In almost 100% of the cases, these tools will have a signature, which means that we cannot simply drop the ``.bin`` file in our malware and execute the loader. To solve this problem, there are methods we can employ, and I will show you a little about them.
 
 ## Cryptography | Obfuscation 
 
@@ -187,21 +187,21 @@ In compilation, it's ideal to have some care, as depending on how it's done, the
 x86_64-w64-mingw32-gcc -s -w -mwindows -nostdlib -Os -fno-asynchronous-unwind-tables -masm=intel blackout.c -o blackout.exe
 ```
 
-- -s: This flag is generally used to remove debugging symbols from the generated object code. This can help reduce the size of the final executable.
+- ``-s``: This flag is generally used to remove debugging symbols from the generated object code. This can help reduce the size of the final executable.
 
-- -w: This flag is used to disable warnings during compilation. Warnings are messages that the compiler emits to indicate potential issues in the code, such as unused variables or suspicious operations.
+- ``-w``: This flag is used to disable warnings during compilation. Warnings are messages that the compiler emits to indicate potential issues in the code, such as unused variables or suspicious operations.
 
-- -mwindows: This flag is specific for compiling as a GUI, so it will not generate a console.
+- ``-mwindows``: This flag is specific for compiling as a GUI, so it will not generate a console.
 
-- -nostdlib: This flag instructs the compiler not to include the standard library (such as libc in the case of C) during linking.
+- ``-nostdlib``: This flag instructs the compiler not to include the standard library (such as libc in the case of C) during linking.
 
-- -Os: This flag optimizes the code for size. It instructs the compiler to try to reduce the size of the generated code, even if this may result in a slight loss of performance.
+- ``-Os``: This flag optimizes the code for size. It instructs the compiler to try to reduce the size of the generated code, even if this may result in a slight loss of performance.
 
-- -fno-asynchronous-unwind-tables: This flag disables the generation of asynchronous unwind tables. These tables are used to track the execution stack during exceptions or errors but can increase the size of the code.
+- ``-fno-asynchronous-unwind-tables``: This flag disables the generation of asynchronous unwind tables. These tables are used to track the execution stack during exceptions or errors but can increase the size of the code.
 
-- -masm=intel: This flag instructs the compiler to generate assembly code in the Intel format instead of the default GCC format.
+- ``-masm=intel``: This flag instructs the compiler to generate assembly code in the Intel format instead of the default GCC format.
 
-- -o flag is used to specify the output file name for the compiled program or object file.
+- ``-o``: flag is used to specify the output file name for the compiled program or object file.
 
 ## Example
 
