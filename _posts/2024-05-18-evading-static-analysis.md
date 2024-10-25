@@ -129,11 +129,11 @@ As an example, I will simply direct you to ``Shellcode Injection``. In the ``Att
 
 # Entropy
 
-Entropy occurs when we have ``random/disordered`` data, usually happening when the data is packed or encrypted. This randomness is analyzed by an algorithm we won't delve into. The calculation of entropy can be checked in various ways, and the ideal is to have the calculation for each section of the PE (Portable Executable). I will show how to store the payload in .text and .rdata section and how this affects the binary's entropy. An important note is, entropy above 6.0 is a bad sign for us, the score ranges from 0 to 10.
+Entropy occurs when we have ``random/disordered`` data, usually happening when the data is packed or encrypted. This randomness is analyzed by an algorithm we won't delve into. The calculation of entropy can be checked in various ways, and the ideal is to have the calculation for each section of the PE (Portable Executable). I will show how to store the payload in ``.text`` and ``.rdata`` section and how this affects the binary's entropy. An important note is, entropy above 6.0 is a bad sign for us, the score ranges from 0 to 10.
 
 ## .text section
 
-To place the payload inside the .text section, it is necessary to declare it to the compiler (MSVC) as follows:
+To place the payload inside the ``.text`` section, it is necessary to declare it to the compiler (MSVC) as follows:
 
 ```c
 #pragma section(".text")
@@ -146,7 +146,7 @@ for mingw-w64-gcc is:
 __attribute__((section(".text"))) <var type> <var name> =
 ```
 
-Now the payload outside the .text section, then allocated in the .text encrypted and decrypted (brute shellcode).
+Now the payload outside the ``.text`` section, then allocated in the ``.text`` encrypted and decrypted (brute shellcode).
 
 ### Outside the .text section.
 
@@ -164,7 +164,7 @@ The raw shellcode in the code increases entropy if it is too large, this should 
 
 ## .rdata section
 
-To allocate the load in the .rdata section, which is read-only data, it is necessary to declare a constant as follows.
+To allocate the load in the ``.rdata`` section, which is read-only data, it is necessary to declare a constant as follows.
 
 ```c
 const unsigned char pPayloadBytes[] =
