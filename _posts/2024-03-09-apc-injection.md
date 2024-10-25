@@ -28,7 +28,7 @@ However, despite its advantages, there is a drawback to APC Injection. In order 
 The ``FIRST WAY`` is by using Early Bird APC Injection, the implementation will be as follows: 
 1. We create a process with the flags ``EXTENDED_STARTUPINFO_PRESENT`` and ``DEBUG_PROCESS`` with [CreateProcess](https://learn.microsoft.com/en-us/windows/win32/api/processthreadsapi/nf-processthreadsapi-createprocessa). 
 2. We will use ``Spoofing PPID`` to start the process in a specific parent process. 
-3. Memory allocation in a remote process with [VirtualAllocEx](https://learn.microsoft.com/en-us/windows/win32/api/memoryapi/nf-memoryapi-virtualallocex) and writing to this memory with [WriteProcessMemory](). 
+3. Memory allocation in a remote process with [VirtualAllocEx](https://learn.microsoft.com/en-us/windows/win32/api/memoryapi/nf-memoryapi-virtualallocex) and writing to this memory with [WriteProcessMemory](https://learn.microsoft.com/en-us/windows/win32/api/memoryapi/nf-memoryapi-writeprocessmemory). 
 4. We will enqueue the payload with [QueueUserAPC](https://learn.microsoft.com/en-us/windows/win32/api/processthreadsapi/nf-processthreadsapi-queueuserapc) and stop the debugging of the remote process using DebugActiveProcessStop, resuming its 
 threads and executing the payload.
 
@@ -42,7 +42,7 @@ Finally, we will enqueue the payload with [QueueUserAPC](https://learn.microsoft
 
 The ``SECOND WAY`` is to pay to see and try to use the APC in all threads of a process. Something interesting is that browsers in general will almost certainly work, the problem is, we may end up receiving several connections in our C2 because it may happen that several threads are in an alert state. One solution for this is Execution Control, basically it's about using ``Mutexes``, ``Semaphores``, ``Events`` and others. Another solution is configuring the infrastructure of your C2, something we will not discuss at this moment. The implementation will be as follows:
 
-1. Use [OpenProcess](https://learn.microsoft.com/en-us/windows/win32/api/processthreadsapi/nf-processthreadsapi-openprocess) in target process, [VirtualAllocEx](https://learn.microsoft.com/en-us/windows/win32/api/memoryapi/nf-memoryapi-virtualallocex) to allocate memory in the remote process with RW permissions, write to the allocated memory with [WriteProcessMemory]() with your payload, and change the permissions to ``RX`` with [VirtualProtectEx](https://learn.microsoft.com/en-us/windows/win32/api/memoryapi/nf-memoryapi-virtualprotectex).
+1. Use [OpenProcess](https://learn.microsoft.com/en-us/windows/win32/api/processthreadsapi/nf-processthreadsapi-openprocess) in target process, [VirtualAllocEx](https://learn.microsoft.com/en-us/windows/win32/api/memoryapi/nf-memoryapi-virtualallocex) to allocate memory in the remote process with RW permissions, write to the allocated memory with [WriteProcessMemory](https://learn.microsoft.com/en-us/windows/win32/api/memoryapi/nf-memoryapi-writeprocessmemory) with your payload, and change the permissions to ``RX`` with [VirtualProtectEx](https://learn.microsoft.com/en-us/windows/win32/api/memoryapi/nf-memoryapi-virtualprotectex).
 
 2. Perform a thread enumeration using CreateToolhelp32Snapshotor NtQuerySystemInformation, whichever you prefer, and then capture the identifier for the desired process and then retrieve the identifiers of the threads.
 
