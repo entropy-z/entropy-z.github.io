@@ -2,10 +2,10 @@
 title: "Shellcode - Pt 4: Stager + Local Injection using Fibers"
 description: In this guide, we will explore how to develop a Stager & Local Injector, using Fibers for payload execution. To fetch the payload from a web server, we will make use of the WinHttp library. Before diving into specific implementations, it is essential to understand the components and the overall structure of the project.
 author: Oblivion
-date: 2024-01-22 11:33:00 +0800
+date: 22024-05-26 11:33:00 +0800
 categories: [Malware Development]
 tags: []
-pin: true
+pin: false
 math: true
 mermaid: true
 ---

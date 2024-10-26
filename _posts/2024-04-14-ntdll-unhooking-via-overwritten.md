@@ -2,10 +2,10 @@
 title: "EDR Evasion 101 - Pt 2: Ntdll Unhooking via Overwritte"
 description: How to remove EDR hooks (byte patching hooking) in ntdll.
 author: Oblivion
-date: 2024-01-22 11:33:00 +0800
+date: 2024-04-14 11:33:00 +0800
 categories: [Malware Development]
 tags: []
-pin: true
+pin: false
 math: true
 mermaid: true
 ---
@@ -142,3 +142,4 @@ printf( "[#] %s [ 0x%p ] ---> %s \n", "NtProtectVirtualMemory", pSyscallAddress,
 ![img](../commons/ntdll_unhooking_overwrite/img1.webp)
 
 You can find the complete code on my github, there I also have other ways to recover an unhooked dll, via web server and via knowdlls: [Github](https://github.com/Entropy-z/EDR_Evasion_101/tree/master/ntdll_unhooking)
+

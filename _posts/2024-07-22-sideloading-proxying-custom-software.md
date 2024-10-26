@@ -2,7 +2,7 @@
 title: "Sideloading + Proxying in Custom Software"
 description: This journal based on DLL Sideloading is essentially a cleaner approach to DLL Hijacking. If you've ever tried DLL Hijacking, you've probably encountered the error "The procedure entry point <exported func> could not be located in the dynamic link library <dll path>". This happens because many software applications crash when they try to access a function exported from a DLL. DLL Sideloading comes into play to bypass this issue, providing a more stable and reliable solution.
 author: Oblivion
-date: 2024-01-22 11:33:00 +0800
+date: 2024-07-22 11:33:00 +0800
 categories: [Malware Development]
 tags: []
 pin: false

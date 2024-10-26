@@ -2,7 +2,7 @@
 title: "EDR Evasion 101 - Pt 1: EDR Architecture"
 description: I will talk about the architecture and detections of Endpoint Detection and Response (EDR). I will briefly go over each topic but the focus is to bring a better understanding of how it works as an introduction to moving on to hook evasion techniques, let's start with its architecture.
 author: Oblivion
-date: 2024-01-22 11:33:00 +0800
+date: 2024-04-08 11:33:00 +0800
 categories: [Malware Development]
 tags: []
 pin: true

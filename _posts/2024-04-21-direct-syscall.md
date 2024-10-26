@@ -2,7 +2,7 @@
 title: "EDR Evasion 101 - Pt 3: Direct Syscall"
 description: Demonstration of the use of direct syscalls to evade hooking carried out by EDR, in addition to its advantages and possible forms of improvement. 
 author: Oblivion
-date: 2024-01-22 11:33:00 +0800
+date: 2024-04-21 11:33:00 +0800
 categories: [Malware Development]
 tags: []
 pin: true

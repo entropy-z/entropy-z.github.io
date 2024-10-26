@@ -2,7 +2,7 @@
 title: "Shellcode - Pt 2: Finding Exported Function"
 description: Now that we have the address of the module loaded into memory, we need to navigate its PE structure and locate the exported function. For this, we'll use LdrFuncAddr, which behaves similarly to GetProcAddress.
 author: Oblivion
-date: 2024-05-01 14:10:00 +0800
+date: 2024-05-21 14:10:00 +0800
 categories: [Malware Development]
 tags: []
 pin: true

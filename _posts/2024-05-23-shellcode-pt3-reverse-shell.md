@@ -2,10 +2,10 @@
 title: "Shellcode - Pt 3: Reverse Shell"
 description: This time we'll develop a reverse shell using cmd.exe + socks. Here, we'll make extensive use of the functionalities seen in the previous modules of this Shellcoding chapter.
 author: Oblivion
-date: 2024-01-22 11:33:00 +0800
+date: 2024-05-23 11:33:00 +0800
 categories: [Malware Development]
 tags: []
-pin: true
+pin: false
 math: true
 mermaid: true
 ---

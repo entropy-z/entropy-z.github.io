@@ -1,12 +1,14 @@
 ---
 title: "Shellcode - Pt 1: Finding Module(DLL) Address"
+description: "In this topic, I will provide a brief description of the four subsequent projects. I will start by explaining the shellcode in C, eventually demonstrating how to perform some of the implementations in Assembly. Each project will be divided into two parts: the C code and a simple loader to execute the shellcode. It's important to note that the developed shellcode needs to be ``position-independent code (PIC)."
 author: Oblivion
-date: 2024-04-30 00:34:00 +0800
+date: 2024-05-19 00:34:00 +0800
 categories: [Malware Development]
 tags: []
+pin: true
+math: true
+mermaid: true
 ---
-
-In this topic, I will provide a brief description of the four subsequent projects. I will start by explaining the shellcode in C, eventually demonstrating how to perform some of the implementations in Assembly. Each project will be divided into two parts: the C code and a simple loader to execute the shellcode. It's important to note that the developed shellcode needs to be ``position-independent code (PIC)``.
 
 # Position Independent Code (PIC)
 
