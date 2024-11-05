@@ -2,7 +2,7 @@
 title: "Evading detection in memory - Pt 1: Sleep Obfuscation - Foliage"
 description: In this post, we will cover topics such as memory detection evasion. We will discuss how memory scanners work and APC-based sleeping obfuscation. 
 author: Oblivion
-date: 2024-07-22 11:33:00 +0800
+date: 2024-11-05 11:33:00 +0800
 categories: [Malware Development]
 tags: []
 pin: true
