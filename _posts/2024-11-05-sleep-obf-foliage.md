@@ -31,7 +31,7 @@ The loader doesn't need to use a complex technique, as it will only be a Proof o
 A memory scan consumes significant computational resources, so the EDR uses criteria to determine where to perform the scan. Among these criteria are memory spaces without backups that have execution permissions, which would signal our beacon. The raw data is also compared with a ``signature/rules`` database.
 Another way to detect our beacon is by analyzing the ``call stack`` of the thread. The return of post-exploitation commands and beacon calls in the sleep state would point to our private memory where the beacon resides, indicating that the code is being executed from that address.
 
-In this blog, we will discuss how to remain obfuscated in memory, hide execution permissions, and conceal the main code of our implant.
+In this blog, we will discuss how to remain obfuscated in memory, hide execution permissions, and conceal the main code of our implant. This way, I can avoid detection from memory scans in the region since it will be obfuscated, and also prevent memory analysis since the memory region will have no execute permissions.
 
 ## Sleep Obfuscation
 
