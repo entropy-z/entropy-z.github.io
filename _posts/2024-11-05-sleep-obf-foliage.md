@@ -261,4 +261,4 @@ Another interesting technique is **Module Stomping**, which will be the topic of
 - [https://dtsec.us/2023-04-24-Sleep/](https://dtsec.us/2023-04-24-Sleep/)
 - [https://x.com/ilove2pwn_](https://x.com/ilove2pwn_)
 - [https://maldevacademy.com/](https://maldevacademy.com/)
-- [Designer: Ian (ichumbo)](https://www.instagram.com/ichumbo/)
+- [Designer: Ian Melo (ichumbo)](https://www.instagram.com/ichumbo/)
