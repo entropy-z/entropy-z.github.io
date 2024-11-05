@@ -232,7 +232,7 @@ Next, we can observe the obfuscated memory region. This is how we find it during
 
 ![Executando SystemFunction041](https://prod-files-secure.s3.us-west-2.amazonaws.com/d724afb4-26d4-450a-8000-9ba11f953c16/1ed5e944-e4ca-4761-a5b5-90f002715854/image.png)
 
-Executando SystemFunction041
+Executing ``SystemFunction041``
 
 ![image.png](https://prod-files-secure.s3.us-west-2.amazonaws.com/d724afb4-26d4-450a-8000-9ba11f953c16/32f98a77-7f8e-4d28-b67d-c11445d7e79c/image.png)
 
