@@ -196,53 +196,49 @@ if ( Status != 0x00 ) {
 
 Opening our implant in [x64dbg](https://x64dbg.com/) and setting breakpoints on the routine functions of the chain to see the step-by-step process. We will also use software that provides more information about processes. In this case, I will be using [Process Hacker](https://processhacker.sourceforge.io/), but alternatively, [Process Explorer](https://learn.microsoft.com/en-us/sysinternals/downloads/process-explorer) from Sysinternals can be used.
 
-![image.png](https://prod-files-secure.s3.us-west-2.amazonaws.com/d724afb4-26d4-450a-8000-9ba11f953c16/c8e4ff17-1c66-4c6d-800f-5ad711ba5b68/image.png)
+![img](../commons/memory-evasion-pt1/img2.png)
 
 The loader we use provides us with the base allocation address. Now, below we will access the address.
 
-![Região desofuscada](https://prod-files-secure.s3.us-west-2.amazonaws.com/d724afb4-26d4-450a-8000-9ba11f953c16/d8ed8a90-1ebc-47f7-b5d2-53ad8de0c915/image.png)
+![Desobfuscated region](../commons/memory-evasion-pt1/img3.png)
 
 Deobfuscated region
 
-![Visualização da área de memória desofuscada](https://prod-files-secure.s3.us-west-2.amazonaws.com/d724afb4-26d4-450a-8000-9ba11f953c16/c5c4bb97-c0f6-455a-a2b5-62bd12926072/image.png)
+![Memory region desobfuscated](../commons/memory-evasion-pt1/img4.png)
 
 Visualization of the Deobfuscated Memory Area
 
 At this point, we have plaintext strings, and the memory region is separated into RX and RW. Now, we will see the result of the first [VirtualProtect](https://learn.microsoft.com/pt-br/windows/win32/api/memoryapi/nf-memoryapi-virtualprotect).
 
-![Executando o VirtualProtect RX→RW](https://prod-files-secure.s3.us-west-2.amazonaws.com/d724afb4-26d4-450a-8000-9ba11f953c16/b095814b-69e9-4ef6-aec0-ce00cc3b8acf/image.png)
+![VirtualProtect RX->RW](../commons/memory-evasion-pt1/img5.png)
 
 Executing [VirtualProtect](https://learn.microsoft.com/pt-br/windows/win32/api/memoryapi/nf-memoryapi-virtualprotect) RX → RW
 
-![Resultado da execução de VirtualProtect RX→RW](https://prod-files-secure.s3.us-west-2.amazonaws.com/d724afb4-26d4-450a-8000-9ba11f953c16/b5d4f19d-a4cc-4442-9a38-89d2f9a31998/image.png)
+![Result of VirtualProtect Execution RX->RW](../commons/memory-evasion-pt1/img6.png)
 
 Result of Executing [VirtualProtect](https://learn.microsoft.com/pt-br/windows/win32/api/memoryapi/nf-memoryapi-virtualprotect) RX → RW
 
 After execution, the memory region was set to RW as expected. The next step is to encrypt it using `SystemFunction040`.
 
-![Executando SystemFunction040 para criptografar a área de memória](https://prod-files-secure.s3.us-west-2.amazonaws.com/d724afb4-26d4-450a-8000-9ba11f953c16/156a69b4-d99d-40b4-94c2-4c9d5e0558f1/image.png)
+![SystemFunction040 for memory encrypt](../commons/memory-evasion-pt1/img7.png)
 
 Executing `SystemFunction040` to encrypt the memory area
 
-![Visualização da região de memória ofuscada](https://prod-files-secure.s3.us-west-2.amazonaws.com/d724afb4-26d4-450a-8000-9ba11f953c16/fbbdfaf4-8612-49d5-954f-e8dedc1faa49/image.png)
+![Memory region obfuscated](../commons/memory-evasion-pt1/img9.png)
 
 Visualization of the Obfuscated Memory Region
 
 Next, we can observe the obfuscated memory region. This is how we find it during sleep. Now, we proceed to decrypt it using `SystemFunction041`.
 
-![Executando SystemFunction041](https://prod-files-secure.s3.us-west-2.amazonaws.com/d724afb4-26d4-450a-8000-9ba11f953c16/1ed5e944-e4ca-4761-a5b5-90f002715854/image.png)
+[Running SystemFunction041](../commons/memory-evasion-pt1/img10.png)
 
 Executing ``SystemFunction041``
 
-![image.png](https://prod-files-secure.s3.us-west-2.amazonaws.com/d724afb4-26d4-450a-8000-9ba11f953c16/32f98a77-7f8e-4d28-b67d-c11445d7e79c/image.png)
+![alt text](../commons/memory-evasion-pt1/image-1.png)
 
 Above, the decrypted data, and the memory region returns to 12KB RX and 4KB RW.
 
-![image.png](https://prod-files-secure.s3.us-west-2.amazonaws.com/d724afb4-26d4-450a-8000-9ba11f953c16/9ad149d4-e77e-45f7-8c2a-e3f3f4c6edbe/image.png)
-
-Video containing the entire detailed step-by-step:
-
-<video here>
+![alt text](../commons/memory-evasion-pt1/image-2.png)
 
 # Detections and IOCs
 As mentioned earlier, one way to analyze a process is by inspecting the thread stack and observing the calling function. This method can be used to flag our implant, as during the sleep state, the thread will be pointing back to the memory region set to RW. This is problematic for us, as it makes detection easier. Another method of detection involves the callback from [VirtualProtect](https://learn.microsoft.com/pt-br/windows/win32/api/memoryapi/nf-memoryapi-virtualprotect) to [NtTestAlert](https://ntdoc.m417z.com/nttestalert), which is commonly used for security monitoring. For example, Elastic EDR leverages this IOC (Indicator of Compromise) to detect suspicious activity, [rule here](https://github.com/elastic/protections-artifacts/blob/136fd6e69610426de969e3d01b98bb9ce10607b2/behavior/rules/windows/defense_evasion_virtualprotect_call_via_nttestalert.toml#L4).
