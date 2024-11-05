@@ -22,7 +22,7 @@ First, we will talk about the types of memory. They are:
 
 These are categories that represent the values of the ``Type`` parameter in the [MEMORY_BASIC_INFORMATION](https://learn.microsoft.com/en-us/windows/win32/api/winnt/ns-winnt-memory_basic_information) structure, which can be retrieved using the base address of memory passed to the [VirtualQuery](https://learn.microsoft.com/en-us/windows/win32/api/memoryapi/nf-memoryapi-virtualquery) API. The most commonly used memory type by malware is private memory, because it allows the protection of memory to be modified at runtime, unlike mapped memory. Command and Control (C2) implants/agents/beacons use [shellcode Reflection DLL Injection (sRDI)](https://oblivion-malware.xyz/posts/shellcode-reflective-dll-injection/) to create shellcode based on a beacon DLL. This technique can be used with evasion loaders to bypass defense solutions.
 
-![image.png](https://prod-files-secure.s3.us-west-2.amazonaws.com/d724afb4-26d4-450a-8000-9ba11f953c16/3ac41617-3b70-498a-a199-968802cab9e5/image.png)
+![image.png](commons/memory-evasion-pt1/img1.png)
 
 The loader doesn't need to use a complex technique, as it will only be a Proof of Concept (PoC). First, the injection process occurs, regardless of the evasion technique used. Then, the [shellcode Reflection DLL Injection (sRDI)](https://oblivion-malware.xyz/posts/shellcode-reflective-dll-injection/) specifically acts on the part highlighted in red, reflecting the PE DLL into another private memory space, containing only the sections, and executing the entry point.
 
