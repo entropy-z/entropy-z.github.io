@@ -242,7 +242,7 @@ Above, the decrypted data, and the memory region returns to 12KB RX and 4KB RW.
 # Detections and IOCs
 As mentioned earlier, one way to analyze a process is by inspecting the thread stack and observing the calling function. This method can be used to flag our implant, as during the sleep state, the thread will be pointing back to the memory region set to RW. This is problematic for us, as it makes detection easier. Another method of detection involves the callback from [VirtualProtect](https://learn.microsoft.com/pt-br/windows/win32/api/memoryapi/nf-memoryapi-virtualprotect) to [NtTestAlert](https://ntdoc.m417z.com/nttestalert), which is commonly used for security monitoring. For example, Elastic EDR leverages this IOC (Indicator of Compromise) to detect suspicious activity, [rule here](https://github.com/elastic/protections-artifacts/blob/136fd6e69610426de969e3d01b98bb9ce10607b2/behavior/rules/windows/defense_evasion_virtualprotect_call_via_nttestalert.toml#L4).
 
-![post-ex activity]({314367C7-CC04-4770-895E-CDBA263EEC6E}.png)
+![post-ex activity](imnz.png)
 
 ![Sleep routine](image.png)
 
