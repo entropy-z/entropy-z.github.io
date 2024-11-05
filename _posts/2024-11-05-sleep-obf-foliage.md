@@ -248,6 +248,6 @@ However, there are ways to improve our Sleep Obfuscation to bypass these detecti
 Another interesting technique is **Module Stomping**, which will be the topic of the next article in this blog.
 
 # Reference and credits
-- [](https://dtsec.us/2023-04-24-Sleep/)
-- [](https://x.com/ilove2pwn_)
-- [](https://maldevacademy.com/)
+- [https://dtsec.us/2023-04-24-Sleep/](https://dtsec.us/2023-04-24-Sleep/)
+- [https://x.com/ilove2pwn_](https://x.com/ilove2pwn_)
+- [https://maldevacademy.com/](https://maldevacademy.com/)
