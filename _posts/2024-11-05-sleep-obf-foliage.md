@@ -230,7 +230,7 @@ Visualization of the Obfuscated Memory Region
 
 Next, we can observe the obfuscated memory region. This is how we find it during sleep. Now, we proceed to decrypt it using `SystemFunction041`.
 
-[Running SystemFunction041](../commons/memory-evasion-pt1/img10.png)
+![Running SystemFunction041](../commons/memory-evasion-pt1/image_copy.png)
 
 Executing ``SystemFunction041``
 
