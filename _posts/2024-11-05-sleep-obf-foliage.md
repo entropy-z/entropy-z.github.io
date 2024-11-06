@@ -239,6 +239,10 @@ Above, the decrypted data, and the memory region returns to 12KB RX and 4KB RW.
 
 ![alt text](../commons/memory-evasion-pt1/image-2.png)
 
+When analyzing with the memory analysis tool called [pe-sieve](https://github.com/hasherezade/pe-sieve), we obtain the following results:
+
+![img](../commons/memory-evasion-pt1/img12.png)
+
 # Detections and IOCs
 As mentioned earlier, one way to analyze a process is by inspecting the thread stack and observing the calling function. This method can be used to flag our implant, as during the sleep state, the thread will be pointing back to the memory region set to RW. This is problematic for us, as it makes detection easier. 
 
@@ -249,6 +253,10 @@ post-ex activity:
 Sleep routine:
 
 ![Sleep routine](../commons/memory-evasion-pt1/imgza.png)
+
+Looking at [moneta](https://github.com/forrest-orr/moneta) we can note the IOC previously mentioned.
+
+![img](../commons/memory-evasion-pt1/img13.png)
 
 Another method of detection involves the callback from [VirtualProtect](https://learn.microsoft.com/pt-br/windows/win32/api/memoryapi/nf-memoryapi-virtualprotect) to [NtTestAlert](https://ntdoc.m417z.com/nttestalert), which is commonly used for security monitoring. For example, Elastic EDR leverages this IOC (Indicator of Compromise) to detect suspicious activity, [rule here](https://github.com/elastic/protections-artifacts/blob/136fd6e69610426de969e3d01b98bb9ce10607b2/behavior/rules/windows/defense_evasion_virtualprotect_call_via_nttestalert.toml#L4).
 
