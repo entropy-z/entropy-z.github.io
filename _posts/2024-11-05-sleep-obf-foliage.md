@@ -217,7 +217,7 @@ Result of Executing [VirtualProtect](https://learn.microsoft.com/pt-br/windows/w
 
 After execution, the memory region was set to RW as expected. The next step is to encrypt it using `SystemFunction040`.
 
-![SystemFunction040 for memory encrypt](../commons/memory-evasion-pt1/img7.png)
+![img](../commons/memory-evasion-pt1/img80.png)
 
 Executing `SystemFunction040` to encrypt the memory area
 
