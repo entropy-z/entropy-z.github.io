@@ -223,8 +223,6 @@ Executing `SystemFunction040` to encrypt the memory area
 
 ![Memory region obfuscated](../commons/memory-evasion-pt1/img9.png)
 
-Visualization of the Obfuscated Memory Region
-
 Next, we can observe the obfuscated memory region. This is how we find it during sleep. Now, we proceed to decrypt it using `SystemFunction041`.
 
 ![Running SystemFunction041](../commons/memory-evasion-pt1/image_copy.png)
