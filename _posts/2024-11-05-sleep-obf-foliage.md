@@ -205,8 +205,6 @@ Deobfuscated region
 
 ![Memory region desobfuscated](../commons/memory-evasion-pt1/img4.png)
 
-Visualization of the Deobfuscated Memory Area
-
 At this point, we have plaintext strings, and the memory region is separated into RX and RW. Now, we will see the result of the first [VirtualProtect](https://learn.microsoft.com/pt-br/windows/win32/api/memoryapi/nf-memoryapi-virtualprotect).
 
 ![VirtualProtect RX->RW](../commons/memory-evasion-pt1/img5.png)
