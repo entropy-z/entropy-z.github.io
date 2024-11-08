@@ -11,16 +11,16 @@ mermaid: true
 ---
 
 As mentioned in the previous blog post [Evading detection in memory - Pt 1: Sleep Obfuscation - Foliage](https://oblivion-malware.xyz/posts/sleep-obf-foliage/), 
-memory detections focus on private memory regions, RX memory regions, and the thread's call stack.
+memory detections focus on private RX memory regions and the thread's call stack.
 
 The **Module Stomping** technique involves overwriting the RX (read-execute) memory region of a DLL loaded in memory with shellcode, 
-with the goal of evading detection based on private memory analysis. This method also avoids concerns about the *call stack*, as the shellcode is executed from a memory region that is supported. However, a challenge with this process is that, when using sRDI (shellcode Reflection DLL Injection) C2 beacons, the memory content will be reflected into a new region, causing an overwrite of a legitimate DLL area. This results in visible modifications, which can be easily detected, generating IOCs (Indicators of Compromise).
+with the goal of evading detection based on private memory analysis. This method also avoids concerns about the *``call stack``*, as the shellcode is executed from a memory region that is supported. However, a challenge with this process is that, when using sRDI (shellcode Reflection DLL Injection) C2 beacons, the memory content will be reflected into a new region, causing an overwrite of a legitimate DLL area. This results in visible modifications, which can be easily detected, generating IOCs (Indicators of Compromise).
 
-The solution to this problem involves using a **reflective loader** in conjunction with the main loader, 
+The solution to this problem involves using a **reflective loader** in conjunction with the Implant, 
 in my case, I'll use a shellcode that doesn't reflect. However, even with this approach, the overwritten memory area can still be perceptible. To enhance this technique and reduce the likelihood of detection, we propose the following process:
 
 1. **Allocate Mapped RW Memory**: First, we allocate two *Mapped RW* memory regions, called **Memory Mapped A** and **Memory Mapped B**.
-2. **Backup the DLL**: We back up the DLL that will be overwritten by storing it in **Memory Mapped A**, preserving the integrity of the original DLL.
+2. **Backup the DLL**: We back up the DLL that will be overwritten by storing it in **Memory Mapped A**, for later preserve the integrity of the original DLL.
 3. **Write the Encrypted Beacon**: The encrypted beacon (shellcode) is then written into **Memory Mapped B**, a secure memory area for the payload.
 4. **Restore During "Sleep"**: During the process's "sleep" time (inactivity), the overwritten DLL is restored to its original position in memory from the backup in **Memory Mapped A**. This step ensures that while the beacon is inactive, the memory will appear legitimate, containing the original DLL data.
 5. **Prepare for Execution**: When it's time to execute the beacon, the memory is overwritten again, and the beacon is loaded back into **Memory Mapped B**, replacing the restored DLL.
@@ -237,7 +237,7 @@ When dealing with the heap, we need to be cautious. If we use the return value f
 
 To solve this problem, we will create our own heap using [RtlCreateHeap](https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/ntifs/nf-ntifs-rtlcreateheap).
 
-```
+```c
     PVOID Heap = RtlCreateHeap( NULL, NULL, 0, 0, 0, NULL );
 ```
 This way, we will have our own heap, and when we use functions like [HeapAlloc](https://learn.microsoft.com/en-us/windows/win32/api/heapapi/nf-heapapi-heapalloc) and others, we will pass our custom heap.
