@@ -14,7 +14,7 @@ As mentioned in the previous blog post [Evading detection in memory - Pt 1: Slee
 memory detections focus on private memory regions, RX memory regions, and the thread's call stack.
 
 The **Module Stomping** technique involves overwriting the RX (read-execute) memory region of a DLL loaded in memory with shellcode, 
-with the goal of evading detection based on private memory analysis. This method also avoids concerns about the *call stack*, as the shellcode is executed from a memory region that is supported. However, a challenge with this process is that, when using sRDI (Self-Reflective Data Injection) C2 beacons, the memory content will be reflected into a new region, causing an overwrite of a legitimate DLL area. This results in visible modifications, which can be easily detected, generating IOCs (Indicators of Compromise).
+with the goal of evading detection based on private memory analysis. This method also avoids concerns about the *call stack*, as the shellcode is executed from a memory region that is supported. However, a challenge with this process is that, when using sRDI (shellcode Reflection DLL Injection) C2 beacons, the memory content will be reflected into a new region, causing an overwrite of a legitimate DLL area. This results in visible modifications, which can be easily detected, generating IOCs (Indicators of Compromise).
 
 The solution to this problem involves using a **reflective loader** in conjunction with the main loader, 
 in my case, I'll use a shellcode that doesn't reflect. However, even with this approach, the overwritten memory area can still be perceptible. To enhance this technique and reduce the likelihood of detection, we propose the following process:
