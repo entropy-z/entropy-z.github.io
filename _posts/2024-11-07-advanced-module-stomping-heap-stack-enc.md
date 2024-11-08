@@ -22,6 +22,7 @@ in my case, I'll use a shellcode that doesn't reflect. However, even with this a
 1. **Allocate Mapped RW Memory**: First, we allocate two *Mapped RW* memory regions, called **Memory Mapped A** and **Memory Mapped B**.
 2. **Backup the DLL**: We back up the DLL that will be overwritten by storing it in **Memory Mapped A**, for later preserve the integrity of the original DLL.
 3. **Write the Encrypted Beacon**: The encrypted beacon (shellcode) is then written into **Memory Mapped B**, a secure memory area for the payload.
+4. **Stomp the text section with shellcode Implant**: We will parse and overwrite the text section of the module.
 4. **Restore During "Sleep"**: During the process's "sleep" time (inactivity), the overwritten DLL is restored to its original position in memory from the backup in **Memory Mapped A**. This step ensures that while the beacon is inactive, the memory will appear legitimate, containing the original DLL data.
 5. **Prepare for Execution**: When it's time to execute the beacon, the memory is overwritten again, and the beacon is loaded back into **Memory Mapped B**, replacing the restored DLL.
 
