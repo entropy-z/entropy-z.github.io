@@ -1,4 +1,3 @@
-
 ---
 title: "Evading detection in memory - Pt 2: Improving Module Stomping + Sleep Obfuscation with heap/stack encryption"
 description: In this chapter we will cover another approach that helps against memory detection called module stomping, we will talk about IOCs, and how to improve the technique.
@@ -10,6 +9,7 @@ pin: true
 math: true
 mermaid: true
 ---
+
 As mentioned in the previous blog post [Evading detection in memory - Pt 1: Sleep Obfuscation - Foliage](https://oblivion-malware.xyz/posts/sleep-obf-foliage/), 
 memory detections focus on private memory regions, RX memory regions, and the thread's call stack.
 
