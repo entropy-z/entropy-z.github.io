@@ -37,13 +37,13 @@ typedef struct _STOMP_ARGS {
 } STOMP_AGRS, *PSTOMP_ARGS;
 ```
 
-(In the injection code responsible for loading the DLL, we will start with a simple POC, loading the DLL "chakra.dll", ...) In the injection code, we will start with a simple POC by loading a DLL called chakra.dll, first, we will load it using the API LoadLibraryEx passing DONT_RESOLVE_DLL_REFERENCES
+(In the injection code responsible for loading the DLL, we will start with a simple POC, loading the DLL "**chakra.dll**", ...) In the injection code, we will start with a simple POC by loading a DLL called chakra.dll, first, we will load it using the API [LoadLibraryEx](https://learn.microsoft.com/pt-br/windows/win32/api/libloaderapi/nf-libloaderapi-loadlibraryexa) passing **DONT_RESOLVE_DLL_REFERENCES**
 
 ```c
     MmBase = Instance.Win32.LoadLibraryExA( "chakra.dll", NULL, DONT_RESOLVE_DLL_REFERENCES );
 ```
 
-This way, the DllMain entrypoint of the DLL is not called, and it also does not resolve the IAT, as otherwise the loaded DLL could load other DLLs and start other threads, which we do not want while performing Module Stomping. The standard use of LoadLibraryEx is problematic for several reasons that we will discuss later.
+This way, the [DllMain entrypoint](https://learn.microsoft.com/en-us/windows/win32/dlls/dllmain) of the DLL is not called, and it also does not resolve the IAT, as otherwise the loaded DLL could load other DLLs and start other threads, which we do not want while performing Module Stomping. The standard use of [LoadLibraryEx](https://learn.microsoft.com/pt-br/windows/win32/api/libloaderapi/nf-libloaderapi-loadlibraryexa) is problematic for several reasons that we will discuss later.
 
 We will parse the DLL header to find its .text section.
 
@@ -177,7 +177,7 @@ This image was taken from the blog post by BRC4 Release: Nightmare, which can be
 - ``LoadNotificationsSent``: This indicates that the loading notification for the DLL was not sent.
 - ``ProcessStaticImport``: This means the DLL’s imports were not processed.
 
-I will create a simple piece of code to compare a DLL loaded with `LoadLibraryA` and compare it with a DLL loaded using `LoadLibraryExA` with the `DONT_RESOLVE_DLL_REFERENCES` flag. The result is shown below:
+I will create a simple piece of code to compare a DLL loaded with [LoadLibraryA](https://learn.microsoft.com/en-us/windows/win32/api/libloaderapi/nf-libloaderapi-loadlibrarya) and compare it with a DLL loaded using [LoadLibraryExA](https://learn.microsoft.com/en-us/windows/win32/api/libloaderapi/nf-libloaderapi-loadlibraryexa) with the `DONT_RESOLVE_DLL_REFERENCES` flag. The result is shown below:
 
 ![img](../commons/memory_evasion_pt2/image.png)
 
@@ -233,16 +233,16 @@ To obfuscate the stack, we need its base address and size. For this, we can use 
 
 ## Heap
 
-When dealing with the heap, we need to be cautious. If we use the return value from `GetProcessHeap` or `PEB->ProcessHeap`, we will be using the "main" heap of the process. It's certain that other threads may also be using the same heap, and if we obfuscate it, the threads will likely freeze, causing the process to crash. Another approach would be to enumerate all threads and suspend them, but I don't like this idea, and I'm sure you understand why.
+When dealing with the heap, we need to be cautious. If we use the return value from [GetProcessHeap](https://learn.microsoft.com/en-us/windows/win32/api/heapapi/nf-heapapi-getprocessheap) or `PEB->ProcessHeap`, we will be using the ``main`` heap of the process. It's certain that other threads may also be using the same heap, and if we obfuscate it, the threads will likely freeze, causing the process to crash. Another approach would be to enumerate all threads and suspend them, but I don't like this idea, and I'm sure you understand why.
 
-To solve this problem, we will create our own heap using `RtlCreateHeap`.
+To solve this problem, we will create our own heap using [RtlCreateHeap](https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/ntifs/nf-ntifs-rtlcreateheap).
 
 ```
     PVOID Heap = RtlCreateHeap( NULL, NULL, 0, 0, 0, NULL );
 ```
-This way, we will have our own heap, and when we use functions like `HeapAlloc` and others, we will pass our custom heap.
+This way, we will have our own heap, and when we use functions like [HeapAlloc](https://learn.microsoft.com/en-us/windows/win32/api/heapapi/nf-heapapi-heapalloc) and others, we will pass our custom heap.
 
-Now, we need to enumerate the blocks and get their size. We can use [`HeapWalk`](https://learn.microsoft.com/en-us/windows/win32/api/heapapi/nf-heapapi-heapwalk), which returns a structure of [`PROCESS_HEAP_ENTRY`](https://learn.microsoft.com/en-us/windows/win32/api/minwinbase/ns-minwinbase-process_heap_entry). The important members are `lpData`, which is the base address of the block, and `cbData`, which is the size of the heap block.
+Now, we need to enumerate the blocks and get their size. We can use [HeapWalk](https://learn.microsoft.com/en-us/windows/win32/api/heapapi/nf-heapapi-heapwalk), which returns a structure of [PROCESS_HEAP_ENTRY](https://learn.microsoft.com/en-us/windows/win32/api/minwinbase/ns-minwinbase-process_heap_entry). The important members are `lpData`, which is the base address of the block, and `cbData`, which is the size of the heap block.
 
 # Reference and credits
 - [BRC4 release: Nightmare](https://bruteratel.com/release/2023/03/19/Release-Nightmare/)
