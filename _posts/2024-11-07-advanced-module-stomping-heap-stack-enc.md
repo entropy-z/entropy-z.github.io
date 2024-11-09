@@ -247,6 +247,32 @@ This way, we will have our own heap, and when we use functions like [HeapAlloc](
 
 Now, we need to enumerate the blocks and get their size. We can use [HeapWalk](https://learn.microsoft.com/en-us/windows/win32/api/heapapi/nf-heapapi-heapwalk), which returns a structure of [PROCESS_HEAP_ENTRY](https://learn.microsoft.com/en-us/windows/win32/api/minwinbase/ns-minwinbase-process_heap_entry). The important members are `lpData`, which is the base address of the block, and `cbData`, which is the size of the heap block.
 
+```c
+FUNC VOID HeapObf( 
+    PVOID Heap
+) {
+    BLACKOUT_INSTANCE
+
+    PROCESS_HEAP_ENTRY HeapEntry   = { 0 };
+    BYTE               HeapKey[16] = { 0x55, 0x55, 0x55, 0x55, 0x55, 0x55, 0x55, 0x55, 0x55, 0x55, 0x55, 0x55, 0x55, 0x55, 0x55, 0x55 }; // can be random generation
+
+    MmZero( &HeapEntry, sizeof( PROCESS_HEAP_ENTRY ) );
+
+    typedef WINBOOL (*fHeapWalk)(HANDLE hHeap, LPPROCESS_HEAP_ENTRY lpEntry);
+    fHeapWalk pHeapWalk = LdrFuncAddr( LdrModuleAddr( H_MODULE_KERNEL32 ), HASH_STR( "HeapWWalk" ) );
+
+    pHeapWalk( Heap, &HeapEntry );
+    if ( HeapEntry.wFlags & PROCESS_HEAP_ENTRY_BUSY ) {
+        XorCipher( HeapEntry.lpData, HeapEntry.cbData, HeapKey, sizeof(HeapKey) );
+    }
+}
+```
+
+# Observation
+There are some improvements that could be made here, such as compile-time string encryption, obfuscating backup regions, using indirect syscalls, etc., but we’re focusing solely on memory evasion for now. We still need to bypass the Elastic rule I mentioned in the previous blog post [Evading detection in memory - Pt 1: Sleep Obfuscation - Foliage](https://oblivion-malware.xyz/posts/sleep-obf-foliage/). In the next blog post, which will be Part 3, we’ll focus on Sleep Obfuscation without module stomping and cover techniques such as stack spoofing, stack duplication, trampoline, and more.
+
+I'm developing a custom agent for the [Havoc](https://github.com/HavocFramework/Havoc/) C2 Framework, which will feature some of these even more sophisticated techniques and will be open source. I'll share more about this project soon.
+
 # Reference and credits
 - [BRC4 release: Nightmare](https://bruteratel.com/release/2023/03/19/Release-Nightmare/)
 - [Aceldr - UDRL](https://github.com/kyleavery/AceLdr)
