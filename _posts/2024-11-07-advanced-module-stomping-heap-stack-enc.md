@@ -8,6 +8,8 @@ tags: []
 pin: true
 math: true
 mermaid: true
+image:
+  path: /commons/memory_evasion_pt2/img.jpg
 ---
 
 As mentioned in the previous blog post [Evading detection in memory - Pt 1: Sleep Obfuscation - Foliage](https://oblivion-malware.xyz/posts/sleep-obf-foliage/), memory detections focus on private ``RX`` memory regions and the thread's call stack.
@@ -37,7 +39,7 @@ typedef struct _STOMP_ARGS {
 } STOMP_AGRS, *PSTOMP_ARGS;
 ```
 
-(In the injection code responsible for loading the DLL, we will start with a simple POC, loading the DLL "**chakra.dll**", ...) In the injection code, we will start with a simple POC by loading a DLL called chakra.dll, first, we will load it using the API [LoadLibraryEx](https://learn.microsoft.com/pt-br/windows/win32/api/libloaderapi/nf-libloaderapi-loadlibraryexa) passing **DONT_RESOLVE_DLL_REFERENCES**
+(In the injection code responsible for loading the DLL, we will start with a simple POC, loading the DLL "**chakra.dll**", ...) In the injection code, we will start with a simple POC by loading a DLL called **chakra.dll**, first, we will load it using the API [LoadLibraryEx](https://learn.microsoft.com/pt-br/windows/win32/api/libloaderapi/nf-libloaderapi-loadlibraryexa) passing **DONT_RESOLVE_DLL_REFERENCES**
 
 ```c
     MmBase = Instance.Win32.LoadLibraryExA( "chakra.dll", NULL, DONT_RESOLVE_DLL_REFERENCES );
@@ -77,7 +79,7 @@ Now, we will create backups of the Agent and the Module using MAPPED memory.
     );
 ```
 
-After changing the protection to RW, we will populate the agent backup and write our shellcode to the .text section, then revert to the previous protection, and finally call ShellcodeMain, passing the structure as an argument.
+After changing the protection to ``RW``, we will populate the agent backup and write our shellcode to the ``.text`` section, then revert to the previous protection, and finally call ShellcodeMain, passing the structure as an argument.
 
 ```c
     Instance.Win32.VirtualProtect( MmBase, SecHdr->SizeOfRawData, PAGE_READWRITE, &Protect );
@@ -96,7 +98,7 @@ After changing the protection to RW, we will populate the agent backup and write
 
 # Agent: SleepObf + Stomping
 
-We will start the sleep obfuscation chain by changing the RX area's address to RW, then writing with the module's backup, reverting to RX, and then sleeping:
+We will start the sleep obfuscation chain by changing the RX area's address to ``RW``, then writing with the module's backup, reverting to ``RX``, and then sleeping:
 
 ```c
     RopProtRw.Rip = Instance()->Win32.VirtualProtect;
@@ -131,7 +133,7 @@ Perspective from [pe-sieve](https://github.com/hasherezade/pe-sieve)
 
 ![imgpesieve](../commons/memory_evasion_pt2/imgpesieve1.png)
 
-Note: The interesting part is that if we don't revert the module's memory back to RX and leave it as RW, Moneta doesn't detect it. However, this isn't a recommended approach.
+Note: The interesting part is that if we don't revert the module's memory back to ``RX`` and leave it as ``RW``, Moneta doesn't detect it. However, this isn't a recommended approach.
 
 Perspective from [moneta](https://github.com/forrest-orr/moneta) about not reverting memory to RX:
 
