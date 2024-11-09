@@ -11,9 +11,9 @@ mermaid: true
 ---
 
 As mentioned in the previous blog post [Evading detection in memory - Pt 1: Sleep Obfuscation - Foliage](https://oblivion-malware.xyz/posts/sleep-obf-foliage/), 
-memory detections focus on private RX memory regions and the thread's call stack.
+memory detections focus on private ``RX`` memory regions and the thread's call stack.
 
-The **Module Stomping** technique involves overwriting the RX (read-execute) memory region of a DLL loaded in memory with shellcode, 
+The **Module Stomping** technique involves overwriting the ``RX`` (read-execute) memory region of a DLL loaded in memory with shellcode, 
 with the goal of evading detection based on private memory analysis. This method also avoids concerns about the *``call stack``*, as the shellcode is executed from a memory region that is supported. However, a challenge with this process is that, when using sRDI (shellcode Reflection DLL Injection) C2 beacons, the memory content will be reflected into a new region, causing an overwrite of a legitimate DLL area. This results in visible modifications, which can be easily detected, generating IOCs (Indicators of Compromise).
 
 The solution to this problem involves using a **reflective loader** in conjunction with the Implant, 
