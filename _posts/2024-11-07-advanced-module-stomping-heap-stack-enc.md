@@ -60,7 +60,7 @@ We will parse the DLL header to find its .text section.
     MmBase = (UINT64)(MmBase) + SecHdr->VirtualAddress;
 ```
 
-Now, we will create backups of the Agent and the Module using MAPPED memory.
+Now, we will create backups of the Agent and the Module using ``MAPPED`` memory.
 
 ```c
     hFile = Instance.Win32.CreateFileMappingA( 
@@ -167,7 +167,7 @@ In this POC, I won’t go into detail about the injector as I believe it's clear
     RopLoadLb.R8  = DONT_RESOLVE_DLL_REFERENCES;
 ```
 
-These are the first two fragments of the chain, but we still have the issue with `LoadLibraryEx`, which is a bit worse in this implementation. Now it's time to fix this and explain more about its problems.
+These are the first two fragments of the chain, but we still have the issue with [LoadLibraryExA](https://learn.microsoft.com/en-us/windows/win32/api/libloaderapi/nf-libloaderapi-loadlibraryexa), which is a bit worse in this implementation. Now it's time to fix this and explain more about its problems.
 
 When a module is loaded with the `xxx` flag within the `LDR_DATA_TABLE_ENTRY` located inside the LDR, some of its values are abnormal, as can be seen below:
 
