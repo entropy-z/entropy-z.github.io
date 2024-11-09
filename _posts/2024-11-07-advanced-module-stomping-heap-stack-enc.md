@@ -14,7 +14,7 @@ As mentioned in the previous blog post [Evading detection in memory - Pt 1: Slee
 memory detections focus on private ``RX`` memory regions and the thread's call stack.
 
 The **Module Stomping** technique involves overwriting the ``RX`` (read-execute) memory region of a DLL loaded in memory with shellcode, 
-with the goal of evading detection based on private memory analysis. This method also avoids concerns about the *``call stack``*, as the shellcode is executed from a memory region that is supported. However, a challenge with this process is that, when using sRDI (shellcode Reflection DLL Injection) C2 beacons, the memory content will be reflected into a new region, causing an overwrite of a legitimate DLL area. This results in visible modifications, which can be easily detected, generating IOCs (Indicators of Compromise).
+with the goal of evading detection based on private memory analysis. This method also avoids concerns about the *``call stack``*, as the shellcode is executed from a memory region that is supported. However, a challenge with this process is that, when using sRDI (shellcode Reflection DLL Injection) C2 beacons, the memory content will be reflected into a new region, causing an overwrite of a legitimate DLL area. This results in visible modifications, which can be easily detected, generating ``IOCs`` (Indicators of Compromise).
 
 The solution to this problem involves using a **reflective loader** in conjunction with the Implant, 
 in my case, I'll use a shellcode that doesn't reflect. However, even with this approach, the overwritten memory area can still be perceptible. To enhance this technique and reduce the likelihood of detection, we propose the following process:
@@ -22,14 +22,14 @@ in my case, I'll use a shellcode that doesn't reflect. However, even with this a
 1. **Allocate Mapped RW Memory**: First, we allocate two *Mapped RW* memory regions, called **Memory Mapped A** and **Memory Mapped B**.
 2. **Backup the DLL**: We back up the DLL that will be overwritten by storing it in **Memory Mapped A**, for later preserve the integrity of the original DLL.
 3. **Write the Encrypted Beacon**: The encrypted beacon (shellcode) is then written into **Memory Mapped B**, a secure memory area for the payload.
-4. **Stomp the text section with shellcode Implant**: We will parse and overwrite the text section of the module.
+4. **Stomp the text section with shellcode Implant**: We will overwrite the text section of the module.
 4. **Restore During "Sleep"**: During the process's "sleep" time (inactivity), the overwritten DLL is restored to its original position in memory from the backup in **Memory Mapped A**. This step ensures that while the beacon is inactive, the memory will appear legitimate, containing the original DLL data.
 5. **Prepare for Execution**: When it's time to execute the beacon, the memory is overwritten again, and the beacon is loaded back into **Memory Mapped B**, replacing the restored DLL.
 
 In this way, the DLL's memory will appear legitimate during the beacon's inactivity period, with a very brief window of visibility only during the beacon's execution. This minimizes the chances of detection, as the memory changes occur only during the active execution phase and are quickly reverted once the beacon has finished executing.
 
 # Injection: Stomping
-We will have a structure to store values to pass to our agent, containing information about the MAPPED memory for agent backup and the backup of the Stomped Module.
+We will have a structure to store values to pass to our agent, containing information about the ``MAPPED`` memory for agent backup and the backup of the Stomped Module.
 
 ```c
 typedef struct _STOMP_ARGS {
@@ -149,7 +149,7 @@ We might still encounter issues with **Shareable Working Set** and **SharedOrigi
 
 Moneta flagged this due to these flags, so I developed a POC (Proof of Concept) to circumvent this. The idea is as follows:
 
-1. **Allocate Mapped RW Memory**: First, we allocate just one *Mapped RW* memory region for implant backup.
+1. First, we allocate just one *Mapped RW* memory region for implant backup.
 2. Write to memory to create a backup of the implant content.
 3. During Sleep Obfuscation, we unload the loaded module and load a fresh instance of the same module without the corrupted image pages.
 4. Upon waking, restore the implant to the `.text` section and resume execution.
@@ -165,6 +165,7 @@ In this POC, I won’t go into detail about the injector as I believe it's clear
     RopLoadLb.Rdx = NULL;
     RopLoadLb.R8  = DONT_RESOLVE_DLL_REFERENCES;
 ```
+
 These are the first two fragments of the chain, but we still have the issue with `LoadLibraryEx`, which is a bit worse in this implementation. Now it's time to fix this and explain more about its problems.
 
 When a module is loaded with the `xxx` flag within the `LDR_DATA_TABLE_ENTRY` located inside the LDR, some of its values are abnormal, as can be seen below:
