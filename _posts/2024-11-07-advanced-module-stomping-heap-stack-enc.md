@@ -204,7 +204,7 @@ To fix this in the PEB, we have the following code:
         }
      }
 
-    NtHdrs = ( (PBYTE)( Module )  +  ( (PIMAGE_DOS_HEADER)( Module ) )->e_lfanew );
+    NtHdrs = ( (PBYTE)( Module ) + ( (PIMAGE_DOS_HEADER)( Module ) )->e_lfanew );
     Ep     = Module + NtHdrs->OptionalHeader.AddressOfEntryPoint;
     
     Data->EntryPoint = Ep;
