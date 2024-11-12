@@ -218,6 +218,20 @@ To fix this in the PEB, we have the following example code:
 
 We retrieve the module's address, then parse it to obtain the `AddressOfEntryPoint` and pass it to `PLDR_DATA_TABLE_ENTRY->EntryPoint`. The other values will be set according to the screenshot above.
 
+This time we will even add [Hunting Sleep Beacons](https://github.com/thefLink/Hunt-Sleeping-Beacons), below we have our advanced module stomping vs memory scanners.
+
+Moneta:
+
+![img](../commons/memory_evasion_pt2/monetaf.png)
+
+pe-sieve:
+
+![img](../commons/memory_evasion_pt2/pesf.png)
+
+Hunting Sleep Beacons:
+
+![img](../commons/memory_evasion_pt2/hsbf.png)
+
 # Heap/Stack Encryption - Plus
 
 An important step in sleep obfuscation is to encrypt both the ``stack`` and the ``heap``. Many pieces of information such as variables, function return addresses, etc., are stored in these areas at runtime.
