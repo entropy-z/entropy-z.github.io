@@ -9,7 +9,7 @@ pin: true
 math: true
 mermaid: true
 image:
-  path: /commons/memory_evasion_pt2/imgmain.png
+  path: /commons/memory_evasion_pt2/imgmainll.png
 ---
 
 As mentioned in the previous blog post [Evading detection in memory - Pt 1: Sleep Obfuscation - Foliage](https://oblivion-malware.xyz/posts/sleep-obf-foliage/), memory detections focus on private ``RX`` memory regions and the thread's call stack.
