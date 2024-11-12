@@ -22,8 +22,8 @@ in my case, I'll use a shellcode that doesn't reflect. However, even with this a
 
 1. **Allocate Mapped RW Memory**: First, we allocate two *Mapped RW* memory regions, called ``Memory Mapped A`` and ``Memory Mapped B``.
 2. **Backup the DLL**: We back up the DLL that will be overwritten by storing it in ``Memory Mapped A``, for later preserve the integrity of the original DLL.
-3. **Write the Encrypted Beacon**: The encrypted beacon (shellcode) is then written into ``Memory Mapped B``, a secure memory area for the payload.
-4. **Stomp the text section with shellcode Implant**: We will overwrite the text section of the module.
+3. **Write the Beacon**: The beacon (shellcode) is then written into ``Memory Mapped B``, a secure memory area for the payload.
+4. **Stomp the text section with shellcode Implant**: We will load DLL using [LoadLibraryEx](https://learn.microsoft.com/pt-br/windows/win32/api/libloaderapi/nf-libloaderapi-loadlibraryexa) passing `DONT_RESOLVE_DLL_REFERENCES` and overwrite the text section of the module.
 4. **Restore During "Sleep"**: During the process's "sleep" time (inactivity), the overwritten DLL is restored to its original position in memory from the backup in ``Memory Mapped A``. This step ensures that while the beacon is inactive, the memory will appear legitimate, containing the original DLL data.
 5. **Prepare for Execution**: When it's time to execute the beacon, the memory is overwritten again, and the beacon is loaded back into ``Memory Mapped B``, replacing the restored DLL.
 
@@ -84,7 +84,6 @@ After changing the protection to ``RW``, we will populate the agent backup and w
 ```c
     Instance.Win32.VirtualProtect( MmBase, SecHdr->SizeOfRawData, PAGE_READWRITE, &Protect );
     
-    MmCopy( StompArgs.AgntBackup, ShellcodeBuffer, ShellcodeSize );
     MmCopy( StompArgs.ModBackup, MmBase, ShellcodeSize );
     MmCopy( MmBase, ShellcodeBuffer, ShellcodeSize );
 
@@ -101,7 +100,8 @@ After changing the protection to ``RW``, we will populate the agent backup and w
 We will start the sleep obfuscation chain by changing the RX area's address to ``RW``, then writing with the module's backup, reverting to ``RX``, and then sleeping:
 
 ```c
-    RopProtRw.Rip = Instance()->Win32.VirtualProtect;
+    RopProtRx.Rip = Gadget; //jmp rbx gadget
+    RopProtRw.Rbx = &Instance()->Win32.VirtualProtect;
     RopProtRw.Rcx = Instance()->Base.RxBase;
     RopProtRw.Rdx = Instance()->Base.RxBase;
     RopProtRw.R8  = PAGE_READWRITE;
@@ -113,7 +113,8 @@ We will start the sleep obfuscation chain by changing the RX area's address to `
     RopModBcp.R8  = Instance()->StompArgs->ModBackup;
     RopModBcp.R9  = Instance()->Base.FullLen;
 
-    RopProtRx.Rip = Instance()->Win32.VirtualProtect;
+    RopProtRx.Rip = Gadget; //jmp rbx gadget
+    RopProtRx.Rbx = &Instance()->Win32.VirtualProtect;
     RopProtRx.Rcx = Instance()->Base.Buffer;
     RopProtRx.Rdx = Instance()->Base.FullLen;
     RopProtRx.R8  = PAGE_EXECUTE_READ;
@@ -143,7 +144,7 @@ Perspective from [moneta] about reverting memory to RX:
 
 ![imgmoneta2](../commons/memory_evasion_pt2/moneta2.png)
 
-We might still encounter issues with **Shareable Working Set** and **SharedOriginal**. I was alerted to this after reading a blog post by Nigerald, which can be found in the last section of this blog post under "**Reference and credits**". He explains them as follows:
+We might still encounter issues with **Shareable Working Set** and **SharedOriginal**. I was alerted to this after reading a blog post by Nigerald and your can see his blog post [here](https://dtsec.us/), which can be found in the last section of this blog post under "**Reference and credits**". He explains them as follows:
 
 - ``Shared Working Set`` is the number of bytes of memory that this particular page is using and is shared. To avoid wasting memory, some of it is shared. For example, `ntdll` is loaded into all processes and uses the same physical memory. If this shared memory is written to, the process gets a private copy of the memory page, using additional physical memory.
 - ``SharedOriginal`` is a flag of a memory page that indicates whether this page is the original mapping. This flag is set to 0 when the page is written to, meaning it would be a copy of the original page, but modified.
@@ -169,7 +170,7 @@ In this POC, I won’t go into detail about the injector as I believe it's clear
 
 These are the first two fragments of the chain, but we still have the issue with [LoadLibraryExA](https://learn.microsoft.com/en-us/windows/win32/api/libloaderapi/nf-libloaderapi-loadlibraryexa), which is a bit worse in this implementation. Now it's time to fix this and explain more about its problems.
 
-When a module is loaded with the `xxx` flag within the `LDR_DATA_TABLE_ENTRY` located inside the LDR, some of its values are abnormal, as can be seen below:
+When a module is loaded with the `DONT_RESOLVE_DLL_REFERENCES` flag within the `LDR_DATA_TABLE_ENTRY` located inside the LDR, some of its values are abnormal, as can be seen below:
 
 ![imgldr](../commons/memory_evasion_pt2/imgldr.png)
 
@@ -186,7 +187,7 @@ I will create a simple piece of code to compare a DLL loaded with [LoadLibraryA]
 
 Note: When I examined other modules, and even the DLL loaded "normally," the ``ProcessStaticImport`` member was marked as `false`, so I kept it as `false` in this case.
 
-To fix this in the PEB, we have the following code:
+To fix this in the PEB, we have the following example code:
 
 ```c
     PLDR_DATA_TABLE_ENTRY Data   = { 0 };
@@ -217,7 +218,7 @@ To fix this in the PEB, we have the following code:
 
 We retrieve the module's address, then parse it to obtain the `AddressOfEntryPoint` and pass it to `PLDR_DATA_TABLE_ENTRY->EntryPoint`. The other values will be set according to the screenshot above.
 
-# Heap/Stack Encryption
+# Heap/Stack Encryption - Plus
 
 An important step in sleep obfuscation is to encrypt both the ``stack`` and the ``heap``. Many pieces of information such as variables, function return addresses, etc., are stored in these areas at runtime.
 
@@ -229,10 +230,28 @@ To obfuscate the stack, we need its base address and size. For this, we can use 
     PTEB Teb = NtCurrentTeb();
     PVOID  StackBase  = Teb->NtTib.StackBase;
     PVOID  StackLimit = Teb->NtTib.StackLimit;
-    UINT64 StackSize  = (U_PTR)( StackLimit - StackBase );
 
-    XorEncrypt( StackBase, StackSize, Key, sizeof( Key ) );
+    XorStack( StackBase, StackSize );
 ```
+
+using this function to obf:
+
+```c
+FUNC VOID XorStack(
+    PVOID StackBase,
+    PVOID StackLimit
+) {
+    for ( PUCHAR Ptr = StackLimit; Ptr < StackBase; Ptr++ ) {
+        *Ptr ^= 0xFF;
+    }
+}
+```
+
+Stack xor demo
+
+![stckxor](../commons/memory_evasion_pt2/stackxor.png)
+
+You may want to use run sleepobf in another thread so that it can xor the stack of the main beacon thread, just be careful not to mess up the call stack
 
 ## Heap
 
@@ -268,8 +287,14 @@ FUNC VOID HeapObf(
 }
 ```
 
+Heap obuscated demo
+
+![heapobf](../commons/memory_evasion_pt2/heapobf.png)
+
+Another approach that may be better than creating your own heap would be to create a wrapper function that allocates on the heap and put all allocations in a linked list ``PLIST_ENTRY`` and still use the process's own Heap, an idea originally from [@bakki](https://x.com/shubakki)
+
 # Observation
-There are some improvements that could be made here, such as compile-time string encryption, obfuscating backup regions, using ``indirect syscalls``, etc., but we’re focusing solely on memory evasion for now. We still need to bypass the Elastic rule I mentioned in the previous blog post [Evading detection in memory - Pt 1: Sleep Obfuscation - Foliage](https://oblivion-malware.xyz/posts/sleep-obf-foliage/). In the next blog post, which will be Part 3, we’ll focus on Sleep Obfuscation without module stomping and cover techniques such as ``stack spoofing``, ``stack duplication``, ``trampoline``, and more.
+There are some improvements that could be made here, such as compile-time string encryption, obfuscating backup regions, using ``indirect syscalls``, etc., but we’re focusing solely on memory evasion for now. We still need to bypass the Elastic rule I mentioned in the previous blog post [Evading detection in memory - Pt 1: Sleep Obfuscation - Foliage](https://oblivion-malware.xyz/posts/sleep-obf-foliage/). In the next blog post, which will be Part 3, we’ll focus on Sleep Obfuscation without module stomping and cover techniques such as ``stack spoofing``, ``stack duplication`` and more.
 
 I'm developing a custom agent for the [Havoc](https://github.com/HavocFramework/Havoc/) C2 Framework, which will feature some of these even more sophisticated techniques and will be open source. I'll share more about this project soon.
 
@@ -279,4 +304,6 @@ I'm developing a custom agent for the [Havoc](https://github.com/HavocFramework/
 - [Nigerald blog](https://dtsec.us/2023-11-04-ModuleStompin/)
 - [Module Shifting](https://naksyn.com/edr%20evasion/2023/06/01/improving-the-stealthiness-of-memory-injections.html)
 - [Maldev Academy](https://maldevacademy.com/)
-
+- [Havoc framework: sleep obf](https://github.com/HavocFramework/Havoc/blob/main/payloads/Demon/src/core/Obf.c#L485)
+- [5pider dev](https://x.com/C5pider)
+- [Bakki dev](https://x.com/shubakki)
