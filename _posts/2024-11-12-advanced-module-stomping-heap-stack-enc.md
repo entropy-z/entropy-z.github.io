@@ -137,12 +137,13 @@ Perspective from [pe-sieve](https://github.com/hasherezade/pe-sieve)
 Note: The interesting part is that if we don't revert the module's memory back to ``RX`` and leave it as ``RW``, Moneta doesn't detect it. However, this isn't a recommended approach.
 
 
-Perspective from [moneta](https://github.com/forrest-orr/moneta) about not reverting memory to RX:
+Perspective from [moneta](https://github.com/forrest-orr/moneta) about not reverting memory to RX
+
 warning: "unsigned module" is just because my .exe is not signed with a certificate.
 
 ![imgmoneta](../commons/memory_evasion_pt2/imgmoneta1.png)
 
-Perspective from [moneta] about reverting memory to RX:
+Perspective from [moneta](https://github.com/forrest-orr/moneta) about reverting memory to RX:
 
 ![imgmoneta2](../commons/memory_evasion_pt2/moneta2.png)
 
