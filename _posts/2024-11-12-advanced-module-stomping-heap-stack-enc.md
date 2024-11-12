@@ -147,7 +147,7 @@ Perspective from [moneta](https://github.com/forrest-orr/moneta) about reverting
 
 ![imgmoneta2](../commons/memory_evasion_pt2/moneta2.png)
 
-We might still encounter issues with **Shareable Working Set** and **SharedOriginal**. I was alerted to this after reading a blog post by Nigerald and your can see his blog post [here](https://dtsec.us/), which can be found in the last section of this blog post under "**Reference and credits**". He explains them as follows:
+We encounter issues with **Shareable Working Set** and **SharedOriginal**. I was alerted to this after reading a blog post by Nigerald and your can see his blog post [here](https://dtsec.us/), which can be found in the last section of this blog post under "**Reference and credits**". He explains them as follows:
 
 - ``Shared Working Set`` is the number of bytes of memory that this particular page is using and is shared. To avoid wasting memory, some of it is shared. For example, `ntdll` is loaded into all processes and uses the same physical memory. If this shared memory is written to, the process gets a private copy of the memory page, using additional physical memory.
 - ``SharedOriginal`` is a flag of a memory page that indicates whether this page is the original mapping. This flag is set to 0 when the page is written to, meaning it would be a copy of the original page, but modified.
