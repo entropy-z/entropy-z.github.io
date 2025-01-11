@@ -295,7 +295,7 @@ And before completing the routine we will return the backup
 
 This way, the main beacon stack during obfuscation will look like this
 
-![StackDuplicated.png](../commons/memory-evasion-pt1/img14.png)
+![StackDuplicated.png](../commons/memory-evasion-pt1/img15.jpg)
 
 Escaping detections based on the beacon's main thread stack.
 
