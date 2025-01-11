@@ -311,7 +311,7 @@ Heap obuscated demo
 Another approach that may be better than creating your own heap would be to create a wrapper function that allocates on the heap and put all allocations in a linked list ``PLIST_ENTRY`` and still use the process's own Heap, an idea originally from [@bakki](https://x.com/shubakki)
 
 # Observation
-There are some improvements that could be made here, such as compile-time string encryption, obfuscating backup regions, using ``indirect syscalls``, etc., but we’re focusing solely on memory evasion for now. We still need to bypass the Elastic rule I mentioned in the previous blog post [Evading detection in memory - Pt 1: Sleep Obfuscation - Foliage](https://oblivion-malware.xyz/posts/sleep-obf-foliage/). In the next blog post, which will be Part 3, we’ll focus on Sleep Obfuscation without module stomping and cover techniques such as ``stack spoofing``, ``stack duplication`` and more.
+There are some improvements that could be made here, such as compile-time string encryption, obfuscating backup regions, using ``indirect syscalls``, etc., but we’re focusing solely on memory evasion for now. We still need to bypass the Elastic rule I mentioned in the previous blog post [Evading detection in memory - Pt 1: Sleep Obfuscation - Foliage](https://oblivion-malware.xyz/posts/sleep-obf-foliage/). 
 
 I'm developing a custom agent for the [Havoc](https://github.com/HavocFramework/Havoc/) C2 Framework, which will feature some of these even more sophisticated techniques and will be open source. I'll share more about this project soon.
 
