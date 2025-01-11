@@ -256,6 +256,52 @@ Looking at [moneta](https://github.com/forrest-orr/moneta) we can note the IOC p
 
 Another method of detection involves the callback from [VirtualProtect](https://learn.microsoft.com/pt-br/windows/win32/api/memoryapi/nf-memoryapi-virtualprotect) to [NtTestAlert](https://ntdoc.m417z.com/nttestalert), which is commonly used for security monitoring. For example, Elastic EDR leverages this IOC (Indicator of Compromise) to detect suspicious activity, [rule here](https://github.com/elastic/protections-artifacts/blob/136fd6e69610426de969e3d01b98bb9ce10607b2/behavior/rules/windows/defense_evasion_virtualprotect_call_via_nttestalert.toml#L4).
 
+# Stack Duplication
+
+Regarding this moneta IOC it is about the **Stack** containing [**NtSignalAndWaitForSingleObject**](https://ntdoc.m417z.com/ntsignalandwaitforsingleobject) that stays during sleep. We managed to solve this using something called `Stack Duplication` in which we will clone all thread properties including registers, stack/stack (where it will contain the return addresses) and so on. Starting steps:
+
+Look for another thread running in the process and use the API [**NtGetContextThread](https://ntdoc.m417z.com/ntgetcontextthread)/[NtSetContextThread](https://ntdoc.m417z.com/ntsetcontextthread)** to get the properties and [**DuplicateHandle**](https://learn.microsoft.com/en-us/windows/win32/api/handleapi/nf-handleapi-duplicatehandle) to duplicate the found thread
+
+
+```c
+Status = bkThreadOpen(
+	THREAD_ALL_ACCESS, FALSE, DupThreadId, &DupThreadHandle 
+);    
+Status = Instance()->Win32().DuplicateHandle(
+	NtCurrentProcess(), NtCurrentThread(), NtCurrentProcess(), 
+	&MainThreadHandle, THREAD_ALL_ACCESS, FALSE, 0 
+);
+```
+
+Perform a backup of the state of the current thread and set the thread that we decided to impersonate the properties within the obfuscation routine
+
+```c
+  RopCtxGetBkp.Rip = Instance()->Win32().NtGetContextThread;
+  RopCtxGetBkp.Rcx = MainThreadHandle;
+  RopCtxGetBkp.Rdx = &CtxBkp;
+
+  RopCtxSetSpf.Rip = Instance()->Win32().NtSetContextThread;
+	RopCtxSetSpf.Rcx = MainThreadHandle;
+  RopCtxSetSpf.Rdx = &CtxSpf;
+```
+
+And before completing the routine we will return the backup
+
+```c
+  RopCtxSetBkp.Rip = Instance()->Win32().NtSetContextThread;
+  RopCtxSetBkp.Rcx = MainThreadHandle;
+	RopCtxSetBkp.Rdx = &CtxBkp;
+```
+
+This way, the main beacon stack during obfuscation will look like this
+
+![StackDuplicated.png](../commons/memory-evasion-pt1/img14.png)
+
+Escaping detections based on the beacon's main thread stack.
+
+# Conclusion
+
+There are ways to improve our obfuscation with Sleep and we will mention one of them in our next blog post which is ***Module Stomping,*** using ***Jump Gadgets*** and avoiding detection based on ***ETW- IT*** as the ***Fluctuation Monitor***.
 
 However, there are ways to improve our Sleep Obfuscation to bypass these detection techniques. One such method I will cover in this blog is ``Stack Duplication``.
 
