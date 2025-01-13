@@ -166,7 +166,7 @@ for ( int i = 0 ; i < pImgNtHdrs->FileHeader.NumberOfSections; i++ ){
 This is necessary because all these resources rely on our DLL being loaded at the ImageBase (also known as the preferred address), which is a member of the Optional Header. Relocation Table is located in .reloc section. However, when loaded into a process, it will be allocated to a different memory space. Therefore, to find the new preferred address, we must use (ImageBase - Allocation Address). 
 
 ```c
-dwOffset = DEREF_64(DllAddr) - pImgNtHdrs->OptionalHeader.ImageBase;
+dwOffset = DEREF_64( DllAddr ) - pImgNtHdrs->OptionalHeader.ImageBase;
 ```
 
 Now we need to obtain the virtual address of the Base Relocation Table. We can access it directly through the VirtualAddress field of the Optional Header, via Optional Header -> Data Directory[x], where x represents the index of the data directory array corresponding to BASE RELOC. However, a more elegant way to do this is by using the IMAGE_DIRECTORY_ENTRY_BASERELOC macro, as demonstrated below.
@@ -188,7 +188,7 @@ We can iterate over these blocks by taking the VirtualAddress + SizeOfBlock, an 
 
 ![img](../commons/reflective_dll_injection/img1.png)
 
-Relocation Entry is a BASE_RELOCATION_ENTRY structure where we will apply relocations:
+Relocation Entry is a **BASE_RELOCATION_ENTRY** structure where we will apply relocations:
 
 ```c
 typedef struct _IMAGE_RELOCATION_ENTRY {
@@ -268,7 +268,7 @@ BOOL FixReloc(
 
 ## Correcting IAT
 
-Its necessary correct the Import Address Table because when the Windows DLL Loader loads the DLL into a process, it already fills the IAT with addresses of the functions used by the PE. However, since we're injecting the DLL into the memory of a process, we need to do this same work manually. The Import Directory Table is located in the idata section and has an array of IMAGE_IMPORT_DESCRIPTOR represented by the following structure:
+Its necessary correct the Import Address Table because when the Windows DLL Loader loads the DLL into a process, it already fills the IAT with addresses of the functions used by the PE. However, since we're injecting the DLL into the memory of a process, we need to do this same work manually. The Import Directory Table is located in the idata section and has an array of **IMAGE_IMPORT_DESCRIPTOR** represented by the following structure:
 
 ```c
 typedef struct _IMAGE_IMPORT_DESCRIPTOR {
