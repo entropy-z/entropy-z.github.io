@@ -1,3 +1,18 @@
+---
+title: "Detoning Direct/Indirect Syscalls by several approachs"
+description: "Here, we’ll demonstrate how to detect both direct and indirect syscalls by discussing detection rules using Elastic, YARA, and dedicated code. We’ll cover several approaches, including Static Analysis, Page Guard + VEH, Call Stack inspection, and ETW-TI."
+author: Oblivion
+date: 2025-04-08 11:33:00 +0800
+categories: [Detection Engineering]
+tags: []
+pin: true
+math: true
+mermaid: true
+image:
+  path: /commons/memory_evasion_pt2/imgmainll.png
+---
+
+
 In this blog post, we’ll focus on the topic of _direct/indirect syscall_. I won’t go into detail about how a _syscall_ works or the _hooking_ mechanism. If you're not familiar with the topic, you can check out my previous posts on [hooking](https://oblivion-malware.xyz/posts/edr-archtecture/#hooked-flow-openprocess) and [direct syscall](https://oblivion-malware.xyz/posts/direct-syscall/).
 
 This technique, for quite some time, has been (and still is) capable of executing APIs in a stealthy manner against some EDRs that rely on userland hooking, often allowing them to be bypassed.
