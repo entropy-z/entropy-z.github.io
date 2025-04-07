@@ -216,4 +216,4 @@ We also gain access to other valuable kernel-level events, such as:
 So even if we can bypass userland from some hook we would still be able to know what is being done based on ETW-TI and Kernel Callbacks.
 
 ## Epilogue
-Here, we’ve covered several approaches from a detection standpoint, and I hope it’s clear how powerful the combination of these techniques can be.
+Here, we’ve covered several approaches from a detection standpoint, and I hope it’s clear how powerful the combination of these techniques can be. 
