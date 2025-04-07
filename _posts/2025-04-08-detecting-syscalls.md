@@ -97,7 +97,7 @@ auto WINAPI WinMain(
 ```
 I overwrite the callback, effectively removing the one previously added by SentinelOne. Before doing that, I use `kernel32!VirtualAlloc` just to demonstrate its execution with the callback still active. Then, I call `kernel32!VirtualAlloc` again after removing the callback to show that it’s no longer in effect. Below is a demonstration video:  
 
-<iframe width="560" height="315" src="https://www.youtube.com/embed/gZ8eiB2VCH8" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+<iframe width="800" height="400" src="https://www.youtube.com/embed/gZ8eiB2VCH8" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
 As we can see, we’re able to remove it without any issues—even though the `ntdll!NtSetInformationProcess` API is hooked. For some reason, SentinelOne allows its callback to be removed right under its nose.
 
