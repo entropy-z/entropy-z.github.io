@@ -97,7 +97,7 @@ auto WINAPI WinMain(
 ```
 I overwrite the callback, effectively removing the one previously added by SentinelOne. Before doing that, I use `kernel32!VirtualAlloc` just to demonstrate its execution with the callback still active. Then, I call `kernel32!VirtualAlloc` again after removing the callback to show that it’s no longer in effect. Below is a demonstration video:  
 
-<video controls src="../commons/detecting_syscalls/RmInstrumentationCallback.mp4" title="Title"></video>
+<video controls src="../commons/detecting_syscalls/RmInstrumentationCallback.mp4" title="Removing InstrumentationCallback"></video>
 
 As we can see, we’re able to remove it without any issues—even though the `ntdll!NtSetInformationProcess` API is hooked. For some reason, SentinelOne allows its callback to be removed right under its nose.
 
