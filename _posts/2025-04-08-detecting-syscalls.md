@@ -2,14 +2,14 @@
 title: "Detoning Direct/Indirect Syscalls by several approachs"
 description: "Here, we’ll demonstrate how to detect both direct and indirect syscalls by discussing detection rules using Elastic, YARA, and dedicated code. We’ll cover several approaches, including Static Analysis, Page Guard + VEH, Call Stack inspection, and ETW-TI."
 author: Oblivion
-date: 2025-04-08 11:33:00 +0800
+date: 2025-04-06 11:33:00 +0800
 categories: [Detection Engineering]
 tags: []
 pin: true
 math: true
 mermaid: true
 image:
-  path: /commons/memory_evasion_pt2/imgmainll.png
+  path: /commons/detecting_syscalls/page.jpg
 ---
 
 
