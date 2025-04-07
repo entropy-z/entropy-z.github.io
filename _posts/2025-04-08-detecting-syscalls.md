@@ -124,7 +124,18 @@ Now let’s take a look at an indirect syscall, paying closer attention to API "
 As we can observe, it's quite easy to identify that API spoofing is happening—because in the case of `ntdll!NtCreateWaitCompletionPacket`, we actually see `ntdll!NtAllocateVirtualMemory` being executed in the kernel. This mismatch is a clear indicator of spoofing.
 
 Using Elastic, we can create a detection rule based on these observations:
-[rule]
+```c
+  process where host.os.type == "windows" and
+    length( winlog.event_data.CallTrace ) > 0 and
+
+    not winlog.event_data.CallTrace :(
+                "?:\\Windows\\System32\\ntdll.dll*",
+                "?:\\Windows\\SysWOW64\\ntdll.dll*",
+                "?:\\Windows\\System32\\win32u.dll*",
+                "?:\\Windows\\System32\\wow64cpu.dll*",
+                "?:\\Windows\\System32\\wow64win.dll*"
+  )
+```
 
 ## Page Guard + VEH
 We implemented a hooking technique that differs from the conventional method, which usually involves overwriting the API with an unconditional jump (`jmp`). In our case, we add a vectored exception handler (VEH) and force an exception at the point where we want the hook to be triggered.
@@ -177,7 +188,7 @@ Next, we’ll set the value of `FuncName` and loop through to retrieve the funct
     }
 ```
 
-Em nossa funcao de manipulacao de exception, será mais ou menos assim:
+In our exception handling function, it will look something like this:
 ```cpp
 auto DetourFunction(
     _In_ PEXCEPTION_POINTERS e
@@ -195,9 +206,9 @@ auto DetourFunction(
     return EXCEPTION_CONTINUE_EXECUTION;
 }
 ```
-Como mencionei acima, verificar se foi expcertion address == syscall instruction, assim sabendo se foi executado um jmp direto para tal. 
+As I mentioned above, check if expcertion address == syscall instruction, thus knowing if a direct jmp was executed for that.
 
-Obs: Essa implementacao esta bem simples e precisa de alguns ajustes para funcionar adequeadamente, o codigo acima é mais para uma demonstracao de como seria.
+Note: This implementation is very simple and needs some adjustments to work properly, the code above is more for a demonstration of how it would be.
 
 ## ETW-TI + Kernel Callbacks
 Summarize: it’s a mechanism that logs events from within the kernel, which makes it significantly harder to bypass—unlike standard ETW, which operates in userland and runs within ntdll.dll.
@@ -216,4 +227,4 @@ We also gain access to other valuable kernel-level events, such as:
 So even if we can bypass userland from some hook we would still be able to know what is being done based on ETW-TI and Kernel Callbacks.
 
 ## Epilogue
-Here, we’ve covered several approaches from a detection standpoint, and I hope it’s clear how powerful the combination of these techniques can be. 
+Here, we’ve covered several approaches from a detection standpoint, and I hope it’s clear how powerful the combination of these techniques can be.
