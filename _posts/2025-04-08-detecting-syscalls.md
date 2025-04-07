@@ -180,8 +180,18 @@ I was a bit lazy to parse the exception directory and retrieve the start and end
 ![[Pasted image 20250404202531.png]]
 
 ## ETW-TI + Kernel Callbacks
-I’ve already covered ETW-TI in a previous blog post [link], but to summarize: it’s a mechanism that logs events from within the kernel, which makes it significantly harder to bypass—unlike standard ETW, which operates in userland and runs within ntdll.dll.
+Summarize: it’s a mechanism that logs events from within the kernel, which makes it significantly harder to bypass—unlike standard ETW, which operates in userland and runs within ntdll.dll.
 
-ETW-TI provides various keywords that we can use as a secure form of telemetry. Unlike userland solutions like hooking, this method offers more reliable and tamper-resistant visibility. Here's a list of the two keyword sets: https://github.com/jdu2600/Windows10EtwEvents/blob/main/manifest/Microsoft-Windows-Threat-Intelligence.tsv. With these, we’re able to:
+ETW-TI provides various keywords that we can use as a secure form of telemetry. Unlike userland solutions like hooking, this method offers more reliable and tamper-resistant visibility. Here's a list of the two keyword sets: [https://github.com/jdu2600/Windows10EtwEvents/blob/main/manifest/Microsoft-Windows-Threat-Intelligence.tsv](https://github.com/jdu2600/Windows10EtwEvents/blob/main/manifest/Microsoft-Windows-Threat-Intelligence.tsv).
+
+With these, we’re able to monitor actions such as local/remote memory allocation, memory protection changes (local/remote), virtual memory writing (local/remote), and other behaviors listed in the linked manifest.
+
+We also gain access to other valuable kernel-level events, such as:
+
+- Process creation via `PsSetCreateProcessNotifyRoutine`
+- Thread creation via `PsSetCreateThreadNotifyRoutine`
+- Image loading via `PsSetLoadNotifyRoutine`
+- Monitoring of handle operations like `DuplicateHandle`, `OpenProcess`, and `OpenThread` via `ObRegisterCallbacks`
 
 ## Epilogue
+Here, we’ve covered several approaches from a detection standpoint, and I hope it’s clear how powerful the combination of these techniques can be.
