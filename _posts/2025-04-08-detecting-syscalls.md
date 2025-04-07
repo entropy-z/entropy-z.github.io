@@ -206,7 +206,7 @@ auto DetourFunction(
     return EXCEPTION_CONTINUE_EXECUTION;
 }
 ```
-As I mentioned above, check if expcertion address == syscall instruction, thus knowing if a direct jmp was executed for that.
+As I mentioned above, check if expcetion address == syscall instruction, thus knowing if a direct jmp was executed for that.
 
 Note: This implementation is very simple and needs some adjustments to work properly, the code above is more for a demonstration of how it would be.
 
