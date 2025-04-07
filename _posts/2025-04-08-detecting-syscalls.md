@@ -27,7 +27,7 @@ rule SyscallHunter {
         description = "Detecting syscall instruction in code"
         author      = "@ Oblivion"
         date        = "2025-04-02"
-        reference   = "https://oblivion-malware.xyz"  
+        reference   = "https://oblivion-malware.xyz/posts/detecting-syscalls"  
 
     strings:  
         $syscall_instruction = { 0F 05 }
