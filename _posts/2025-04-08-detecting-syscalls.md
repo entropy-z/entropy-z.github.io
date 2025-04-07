@@ -177,6 +177,28 @@ Next, we’ll set the value of `FuncName` and loop through to retrieve the funct
     }
 ```
 
+Em nossa funcao de manipulacao de exception, será mais ou menos assim:
+```cpp
+auto DetourFunction(
+    _In_ PEXCEPTION_POINTERS e
+) -> LONG {
+    mPrint( "inside of exception handler" );
+
+    if ( e->ExceptionRecord->ExceptionCode == EXCEPTION_GUARD_PAGE ) {    
+        if ( !( memcmp( e->ExceptionRecord->ExceptionAddress, &SyscallOpcode, sizeof( SyscallOpcode ) ) ) ) {
+            mPrint( "potential indirect syscall jumping to instruction at %p", e->ExceptionRecord->ExceptionAddress );
+        } else {
+            mPrint( "legitimate access at %p", e->ExceptionRecord->ExceptionAddress );
+        }
+    }
+
+    return EXCEPTION_CONTINUE_EXECUTION;
+}
+```
+Como mencionei acima, verificar se foi expcertion address == syscall instruction, assim sabendo se foi executado um jmp direto para tal. 
+
+Obs: Essa implementacao esta bem simples e precisa de alguns ajustes para funcionar adequeadamente, o codigo acima é mais para uma demonstracao de como seria.
+
 ## ETW-TI + Kernel Callbacks
 Summarize: it’s a mechanism that logs events from within the kernel, which makes it significantly harder to bypass—unlike standard ETW, which operates in userland and runs within ntdll.dll.
 
@@ -189,7 +211,9 @@ We also gain access to other valuable kernel-level events, such as:
 - Process creation via `PsSetCreateProcessNotifyRoutine`
 - Thread creation via `PsSetCreateThreadNotifyRoutine`
 - Image loading via `PsSetLoadNotifyRoutine`
-- Monitoring of handle operations like `DuplicateHandle`, `OpenProcess`, and `OpenThread` via `ObRegisterCallbacks`
+- Monitoring of handle operations like `DuplicateHandle`, `OpenProcess`, and `OpenThread` via `ObRegisterCallbacks`.
+
+So even if we can bypass userland from some hook we would still be able to know what is being done based on ETW-TI and Kernel Callbacks.
 
 ## Epilogue
 Here, we’ve covered several approaches from a detection standpoint, and I hope it’s clear how powerful the combination of these techniques can be.
