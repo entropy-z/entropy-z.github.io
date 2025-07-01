@@ -17,7 +17,7 @@ Kharon has several post-exploitation capabilities that enable the operator to pe
 
 # Key Features
 - Unmanaged Powershell execution without use Invoke-Expression using my own custom dotnet.
-
+- Lateral moviment modules.
 
 - .NET in memory execution tested against defense solutions like Crowdstrike, SentinelOne, Elastic and Microsoft Defender for Endpoint.
 
@@ -34,7 +34,7 @@ Kharon has several post-exploitation capabilities that enable the operator to pe
 - SCM interaction.
 - Registry interaction.
 
-## Evasion
+# Evasion
 - Usa Hardware Breakpoint para bypass de AMSI/ETW para execucao de .NET e Powershell execute in memory. 
 - Call Stack Spoofing for bypassing stack tracing detections.
 - Sleep Obfuscation to hide beacon in memory.
@@ -42,3 +42,11 @@ Kharon has several post-exploitation capabilities that enable the operator to pe
 - Stack duplication during sleep.
 - Indirect Syscalls.
 - BOF API calls hooking applying the config choicce like stack spoof and indirect syscall (with options you dont need spoof the call in your BOF).
+
+# Lateral Movimentation
+Can execute in remote machine via WMI (using COM), WinRM (using COM) and SCM (like psexec).
+
+# Alternate Behavior with Config command
+
+# Starting Point
+This section its will be the guide to build and use:
