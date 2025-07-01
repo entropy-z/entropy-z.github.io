@@ -148,12 +148,6 @@ The `Config` command allows customization of runtime behavior, including:
 This section will be expanded with a detailed guide on how to build and operate the agent.
 
 ## Build
-Below is the screen showing the available build options:
-![build1](../commons/kharon-1/build-1.png)
-Options starting with 0.* are applied to both the loader and the agent.
-Options starting with 1.* are applied only to the agent.
-
-# Build
 
 Below is the screen showing the available build options:  
 ![build1](../commons/kharon-1/build-1.png)
