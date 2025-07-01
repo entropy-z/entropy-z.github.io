@@ -20,6 +20,13 @@ The agent is highly flexible, and most of its behavior can be configured at runt
 
 ---
 
+# Motivation
+I decided to start building my own agent because I consider Mythic to be one of the best free C2 frameworks available. However, I couldn't find many high-quality agents for Windows that offered advanced post-exploitation and evasion capabilities.
+
+So, I took the opportunity to write my own—both to fill that gap and to consolidate my knowledge into a more complex and meaningful project.
+
+---
+
 # Supported Profiles
 
 - HTTP/S  
