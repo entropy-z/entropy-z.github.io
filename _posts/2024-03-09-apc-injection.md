@@ -49,6 +49,6 @@ The ``SECOND WAY`` is to pay to see and try to use the APC in all threads of a p
 3. Utilize [QueueUserAPC](https://learn.microsoft.com/en-us/windows/win32/api/processthreadsapi/nf-processthreadsapi-queueuserapc) to enqueue your payload.
 
 # Conclusion
-The advantages, disadvantages, and methods of executing an evasive APC injection were explained. A reader with a certain level of programming and Windows knowledge will be able to apply the techniques properly explained without much difficulty, even though it is a theoretical article. However, I leave here an example of a repository on my GitHub called [Early_Bird_Injection](https://github.com/Entropy-z/Early_Bird_Injection) with first implementation.
+The advantages, disadvantages, and methods of executing an evasive APC injection were explained. A reader with a certain level of programming and Windows knowledge will be able to apply the techniques properly explained without much difficulty, even though it is a theoretical article.
 
 Certainly, this raw technique as it stands may still be detected by some solutions through API Hooking. There are other functionalities to add, such as anti-analysis mechanisms and bypassing ``API Hooking``, for example, ``NTDLL Unhooking`` and ``Syscalls``. These will be two topics for future articles in this journal. Any questions or suggestions, feel free to contact me. Until the next article! 🙃

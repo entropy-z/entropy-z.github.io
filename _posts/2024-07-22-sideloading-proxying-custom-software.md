@@ -212,5 +212,3 @@ Now, when we execute the Custom_Software, the following result will be displayed
 It's also possible to perform sideloading through DLL path hijacking. Imagine we have the original DLL, Dll_Legit.dll, located at C:\Windows\System32\Dll_Legit.dll. We can upload our DLL to the same path as Dll_Legit and specify the absolute path in our malicious implementation. The prerequisite for this would be to check in Process Monitor if it generates a NAME NOT FOUND result with the following filter shown below:
 
 ![img](../commons/sideloading_proxying/imgg6.png)
-
-# [Github Repository](https://github.com/Entropy-z/DLL_Sideloading_Proxying)

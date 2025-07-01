@@ -141,5 +141,3 @@ printf( "[#] %s [ 0x%p ] ---> %s \n", "NtProtectVirtualMemory", pSyscallAddress,
 
 ![img](../commons/ntdll_unhooking_overwrite/img1.webp)
 
-You can find the complete code on my github, there I also have other ways to recover an unhooked dll, via web server and via knowdlls: [Github](https://github.com/Entropy-z/EDR_Evasion_101/tree/master/ntdll_unhooking)
-

@@ -124,5 +124,4 @@ Direct syscalls are easily detected because, in the Windows operating system, it
 
 To avoid this, you can use Indirect Syscall, which is to execute the syscall directly from ntdll, for more information, you can use [HellsHall](https://github.com/Maldev-Academy/HellHall).
 
-## [Code Repository](https://github.com/Entropy-z/EDR_Evasion_101/tree/master/direct_syscall)
 
