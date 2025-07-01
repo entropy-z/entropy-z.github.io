@@ -91,7 +91,7 @@ BeaconWriteAPC
 BeaconDripAlloc
 ```
 
-## Supported Hooked API Table
+## Supported Hooked API Table | Indirect Syscall | Spoof
 ```text
 VirtualAlloc  
 VirtualProtect  
