@@ -16,7 +16,7 @@ image:
 
 **Kharon** provides a range of advanced post-exploitation capabilities that allow the operator to execute actions in an evasive way. The core functionality is implemented directly in the agent, while additional features are delivered in-memory via **stagers** using **BOFs**. Later, these will migrate to **shellcode** when using **Fork & Run**.
 
-The agent is highly flexible, and most of its behavior can be configured at runtime using the `Config` command.
+The agent is highly flexible, and most of its behavior can be configured at runtime using the Config command. It is implemented entirely as shellcode with mordern design, without relying on sRDI, making it easier to use during injection.
 
 ---
 
@@ -130,6 +130,10 @@ The `Config` command allows customization of runtime behavior, including:
 - Call stack spoof toggle  
 - Sleep obfuscation method: `None (WaitForSingleObject)` or `Timer`  
 - BOF API hooking options  
+- Sleep Time
+- Sleep Jitter
+- Exit method `Process or Thread`
+- 
 
 ---
 
@@ -143,6 +147,7 @@ This section will be expanded with a detailed guide on how to build and operate 
 
 - Support for JScript, VBS, and XSL in memory execution 
 - SOCKS proxy integration
+- Argument Spoofing for Process creation.
 - Improved .NET execution with output redirection for better performance
 - Enhance Unmanaged PowerShell execution to eliminate dependency on in-memory .NET
 - PE in-memory execution with IAT hooking
@@ -151,5 +156,6 @@ This section will be expanded with a detailed guide on how to build and operate 
 - Loader with advanced features (stager options, anti-analysis, evasion, etc.)
 - Module stomping option for shellcode injection
 - Keylogger
+
 ---
 
