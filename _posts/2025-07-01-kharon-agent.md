@@ -133,7 +133,7 @@ The `Config` command allows customization of runtime behavior, including:
 - Sleep Time
 - Sleep Jitter
 - Exit method `Process or Thread`
-- 
+
 
 ---
 
