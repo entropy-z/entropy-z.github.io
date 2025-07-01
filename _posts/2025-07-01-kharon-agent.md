@@ -53,7 +53,10 @@ The agent is highly flexible, and most of its behavior can be configured at runt
 # Evasion Techniques
 
 - **Hardware breakpoints** for AMSI/ETW bypass during .NET and PowerShell memory execution.
+Set breakpoint in the ``AmsiScanBuffer`` and ``NtTraceEvent``. You can see code [here](https://github.com/entropy-z/Injection-BOFs)
 - **Call Stack Spoofing** to evade stack tracing detection.
+NtAllocateVirtualMemory call stack example with spoof and indirect syscall:
+![spoof1](../commons/kharon-1/spoofv1.png)
 - **Sleep Obfuscation** to conceal beacon activity in memory.
 - **Heap Obfuscation** during sleep (heap allocations are XOR-obfuscated).
 - **Stack Duplication** during sleep.
