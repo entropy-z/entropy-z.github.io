@@ -39,7 +39,10 @@ The agent is highly flexible, and most of its behavior can be configured at runt
 
 - Shellcode execution in memory, with configurable behavior through runtime options.
 - Process creation with **PPID spoofing** and output recovery.
-- Screenshot capability.
+- Screenshot capability. Demo
+![scr](../commons/kharon-1/screenshotv1.png)
+![scr2](../commons/kharon-1/scrensshotv2.png)
+
 - Communication is encrypted using **Loky**, with encryption keys protected using **process cookies**.
 - Token manipulation.
 - Kerberos interaction (via [Kerbeus-BOF](https://github.com/RalfHacker/Kerbeus-BOF) by [Ralf](https://github.com/RalfHacker)).
@@ -140,6 +143,55 @@ The `Config` command allows customization of runtime behavior, including:
 # Getting Started
 
 This section will be expanded with a detailed guide on how to build and operate the agent.
+
+## Build
+Below is the screen showing the available build options:
+![build1](../commons/kharon-1/build-1.png)
+Options starting with 0.* are applied to both the loader and the agent.
+Options starting with 1.* are applied only to the agent.
+
+# Build
+
+Below is the screen showing the available build options:  
+![build1](../commons/kharon-1/build-1.png)
+
+Options starting with **0.*** are applied to both the loader and the agent.  
+Options starting with **1.*** are applied only to the agent.
+
+## Agent Options
+
+- **1.0 Memory Obfuscation**  
+  Choose the method to obfuscate memory during sleep.  
+  **Options:** `None`, `Timer`
+
+- **1.1 Heap Obfuscation**  
+  If enabled, all heap allocations will be obfuscated using XOR.
+
+- **1.2 Indirect Syscalls**  
+  If enabled, the beacon will use indirect syscalls.
+
+- **1.3 Hardware Breakpoints**  
+  Uses HWBP to bypass AMSI/ETW depending on your configuration.
+
+- **1.4 Spoof Call Stack**  
+  Spoofs the call stack to evade stack-based detection.
+
+- **1.5 Beacon Object File (BOF) Hooks**  
+  Enables API call hooks for BOFs.
+
+- **1.6 Shellcode Injection**  
+  Choose the preferred technique for shellcode injection.
+
+- **1.7 Self-Deletion in Kill Date Routine**  
+  Allows the beacon to delete itself during the kill date routine.
+
+- **1.8 Kill Date Option**  
+  Set a date for the agent to stop running.
+
+- **1.9 Exit Method**  
+  Defines how the agent exits during the kill date routine.  
+  **Options:** `Thread`, `Process`
+
 
 ---
 
