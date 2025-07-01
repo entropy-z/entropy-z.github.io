@@ -152,7 +152,7 @@ This section will be expanded with a detailed guide on how to build and operate 
 Below is the screen showing the available build options:  
 ![build1](../commons/kharon-1/build-1.png)
 
-Options starting with **0.*** are applied to both the loader and the agent.  
+Options starting with **0.*** are applied to both the loader of the agent and the agent.  
 Options starting with **1.*** are applied only to the agent.
 
 ## Agent Options
