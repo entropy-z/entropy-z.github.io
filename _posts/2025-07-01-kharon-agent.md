@@ -14,7 +14,7 @@ image:
 
 # Overview
 
-[**Kharon**](https://github.com/entropy-z/Kharon) provides a range of advanced post-exploitation capabilities that allow the operator to execute actions in an evasive way. The core functionality is implemented directly in the agent, while additional features are delivered in-memory via **stagers** using **BOFs**. Later, these will migrate to **shellcode** when using **Fork & Run**.
+[**Kharon**](https://github.com/MythicAgents/Kharon) provides a range of advanced post-exploitation capabilities that allow the operator to execute actions in an evasive way. The core functionality is implemented directly in the agent, while additional features are delivered in-memory via **stagers** using **BOFs**. Later, these will migrate to **shellcode** when using **Fork & Run**.
 
 The agent is highly flexible, and most of its behavior can be configured at runtime using the Config command. It is implemented entirely as shellcode with mordern design, without relying on sRDI, making it easier to use during injection.
 
