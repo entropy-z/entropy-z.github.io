@@ -123,19 +123,7 @@ Now let’s take a look at an indirect syscall, paying closer attention to API "
 
 As we can observe, it's quite easy to identify that API spoofing is happening—because in the case of `ntdll!NtCreateWaitCompletionPacket`, we actually see `ntdll!NtAllocateVirtualMemory` being executed in the kernel. This mismatch is a clear indicator of spoofing.
 
-Using Elastic, we can create a detection rule based on these observations:
-```c
-  process where host.os.type == "windows" and
-    length( winlog.event_data.CallTrace ) > 0 and
-
-    not winlog.event_data.CallTrace :(
-                "?:\\Windows\\System32\\ntdll.dll*",
-                "?:\\Windows\\SysWOW64\\ntdll.dll*",
-                "?:\\Windows\\System32\\win32u.dll*",
-                "?:\\Windows\\System32\\wow64cpu.dll*",
-                "?:\\Windows\\System32\\wow64win.dll*"
-  )
-```
+Elastic have the the great rule for direct syscalls, you can see rule [here](https://www.elastic.co/docs/reference/security/prebuilt-rules/rules/windows/defense_evasion_suspicious_process_access_direct_syscall#rule-query)
 
 ## Page Guard + VEH
 We implemented a hooking technique that differs from the conventional method, which usually involves overwriting the API with an unconditional jump (`jmp`). In our case, we add a vectored exception handler (VEH) and force an exception at the point where we want the hook to be triggered.
