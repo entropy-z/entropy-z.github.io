@@ -4,7 +4,7 @@ description: How to remove EDR hooks (byte patching hooking) in ntdll.
 author: Oblivion
 date: 2024-04-14 11:33:00 +0800
 categories: [Malware Development]
-tags: []
+tags: ["Windows"]
 pin: false
 math: true
 mermaid: true
