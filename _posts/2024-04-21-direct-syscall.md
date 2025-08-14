@@ -4,7 +4,7 @@ description: Demonstration of the use of direct syscalls to evade hooking carrie
 author: Oblivion
 date: 2024-04-21 11:33:00 +0800
 categories: [Malware Development]
-tags: []
+tags: ["Windows"]
 pin: false
 math: true
 mermaid: true
