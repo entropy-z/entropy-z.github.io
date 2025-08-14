@@ -4,7 +4,7 @@ description: "In this topic, I will provide a brief description of the four subs
 author: Oblivion
 date: 2024-05-19 00:34:00 +0800
 categories: [Malware Development]
-tags: []
+tags: ["Windows"]
 pin: true
 math: true
 mermaid: true
