@@ -15,6 +15,6 @@ I am a Red Team Researcher and Developer + Operator, this journal to document/sh
 - Certified Red Team Lead (CRTL)
 
 # Profile Links
-- Discord: awedscxdzczx
+- Discord: ssaqwwqwz 
 - GitHub: [entropy-z](https://github.com/entropy-z)
-- Linkedin: [josue-magalhaes](https://www.linkedin.com/in/josue-magalhaes/)
+- Linkedin: [josue-magalhaes](https://www.linkedin.com/in/josu%C3%A9-m-6311882a4/)
